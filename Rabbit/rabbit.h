@@ -1,0 +1,17 @@
+#pragma once
+
+enum RABBIT_MODE
+{
+	RABBIT_MODE_LUA,
+	RABBIT_MODE_PYTHON,
+};
+
+typedef struct {
+	RABBIT_MODE mode;
+	TCHAR * path;
+	char * script;
+} RABBIT_PROC;
+
+void rabbit_file(RABBIT_MODE mode, LPCTSTR path);
+void rabbit_string(RABBIT_MODE mode, char * script);
+void rabbit_debug();
