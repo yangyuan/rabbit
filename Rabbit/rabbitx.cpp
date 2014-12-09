@@ -2,153 +2,163 @@
 #include "rabbit.h"
 #include "rabbit_core.h"
 
-int _lua_rabbit_keypress(lua_State *L)
-{
-	const char * keychar;
-	int argc = lua_gettop(L);
-	if (argc != 1) return 0;
-	keychar = lua_tostring(L, 1);
-	rabbit_keypress(keychar);
-	return 0;
+PyObject * _python_rabbit_sleep(PyObject * self, PyObject * args) {
+    unsigned int arg_0;
+    int tupleret = PyArg_ParseTuple(args, "I", &arg_0);
+    rabbit_sleep(arg_0);
+    return Py_BuildValue("");
 }
 
-PyObject * _python_rabbit_keypress(PyObject *self, PyObject *args) {
-	char * keychar;
-	int tupleret = PyArg_ParseTuple(args, "s", &keychar);
-	rabbit_keypress(keychar);
-	return Py_BuildValue("");
+int _lua_rabbit_sleep(lua_State * L) {
+    int argc = lua_gettop(L);
+    unsigned int arg_0 = lua_tounsigned(L, 1);
+    rabbit_sleep(arg_0);
+    return 0;
 }
 
-int _lua_rabbit_sleep(lua_State *L)
-{
-	unsigned int milliseconds;
-	int argc = lua_gettop(L);
-	if (argc != 1) return 0;
-	milliseconds = lua_tounsigned(L, 1);
-	rabbit_sleep(milliseconds);
-	return 0;
+PyObject * _python_rabbit_keypress(PyObject * self, PyObject * args) {
+    const char * arg_0;
+    int tupleret = PyArg_ParseTuple(args, "s", &arg_0);
+    rabbit_keypress(arg_0);
+    return Py_BuildValue("");
 }
 
-PyObject * _python_rabbit_sleep(PyObject *self, PyObject *args) {
-	unsigned int milliseconds;
-	int tupleret = PyArg_ParseTuple(args, "I", &milliseconds);
-	rabbit_sleep(milliseconds);
-	return Py_BuildValue("");
+int _lua_rabbit_keypress(lua_State * L) {
+    int argc = lua_gettop(L);
+    const char * arg_0 = lua_tostring(L, 1);
+    rabbit_keypress(arg_0);
+    return 0;
 }
 
-int _lua_rabbit_click(lua_State *L) { rabbit_click(); return 0; }
-PyObject * _python_rabbit_click(PyObject *self, PyObject *args) { rabbit_click(); return Py_BuildValue(""); }
-
-int _lua_rabbit_rightclick(lua_State *L) { rabbit_rightclick(); return 0; }
-PyObject * _python_rabbit_rightclick(PyObject *self, PyObject *args) { rabbit_rightclick(); return Py_BuildValue(""); }
-
-int _lua_rabbit_doubleclick(lua_State *L) { rabbit_doubleclick(); return 0; }
-PyObject * _python_rabbit_doubleclick(PyObject *self, PyObject *args) { rabbit_doubleclick(); return Py_BuildValue(""); }
-
-int _lua_rabbit_moveto(lua_State *L) {
-	unsigned int x;
-	unsigned int y;
-	int argc = lua_gettop(L);
-	if (argc != 2) return 0;
-	x = lua_tounsigned(L, 1);
-	y = lua_tounsigned(L, 2);
-	rabbit_moveto(x, y);
-	return 0;
+PyObject * _python_rabbit_moveto(PyObject * self, PyObject * args) {
+    unsigned int arg_0;
+    unsigned int arg_1;
+    int tupleret = PyArg_ParseTuple(args, "II", &arg_0, &arg_1);
+    rabbit_moveto(arg_0, arg_1);
+    return Py_BuildValue("");
 }
 
-PyObject * _python_rabbit_moveto(PyObject *self, PyObject *args) {
-	unsigned int x;
-	unsigned int y;
-	int tupleret = PyArg_ParseTuple(args, "II", &x, &y);
-	rabbit_moveto(x, y);
-	return Py_BuildValue("");
+int _lua_rabbit_moveto(lua_State * L) {
+    int argc = lua_gettop(L);
+    unsigned int arg_0 = lua_tounsigned(L, 1);
+    unsigned int arg_1 = lua_tounsigned(L, 2);
+    rabbit_moveto(arg_0, arg_1);
+    return 0;
 }
 
-int _lua_rabbit_findcolor(lua_State *L) {
-	unsigned int color;
-	unsigned int x;
-	unsigned int y;
-	unsigned int w;
-	unsigned int h;
-	unsigned int order;
-	double tolerance;
-
-	
-	int argc = lua_gettop(L);
-	if (argc != 7) return 0;
-	color = lua_tounsigned(L, 1);
-	x = lua_tounsigned(L, 2);
-	y = lua_tounsigned(L, 3);
-	w = lua_tounsigned(L, 4);
-	h = lua_tounsigned(L, 5);
-	order = lua_tounsigned(L, 6);
-	tolerance = lua_tonumber(L, 7);
-
-	int ret_x;
-	int ret_y;
-	rabbit_findcolor(&ret_x, &ret_y, color, x, y, w, h, order, tolerance);
-	lua_pushinteger(L, ret_x);
-	lua_pushinteger(L, ret_y);
-	return 2;
+PyObject * _python_rabbit_click(PyObject * self, PyObject * args) {
+    int tupleret = PyArg_ParseTuple(args, "");
+    rabbit_click();
+    return Py_BuildValue("");
 }
 
-
-
-PyObject * _python_rabbit_findcolor(PyObject *self, PyObject *args) {
-	unsigned int color;
-	unsigned int x;
-	unsigned int y;
-	unsigned int w;
-	unsigned int h;
-	unsigned int order;
-	double tolerance;
-	int tupleret = PyArg_ParseTuple(args, "IIIIIId", &color, &x, &y, &w, &h, &order, &tolerance);
-	int ret_x;
-	int ret_y;
-	rabbit_findcolor(&ret_x, &ret_y, color, x, y, w, h, order, tolerance);
-	return Py_BuildValue("ii", ret_x, ret_y);
+int _lua_rabbit_click(lua_State * L) {
+    int argc = lua_gettop(L);
+    rabbit_click();
+    return 0;
 }
 
-PyObject * _python_rabbit_get_cursor_hash(PyObject *self, PyObject *args) {
-	unsigned int ret;
-	rabbit_get_cursor_hash(&ret);
-	return Py_BuildValue("I", ret);
+PyObject * _python_rabbit_doubleclick(PyObject * self, PyObject * args) {
+    int tupleret = PyArg_ParseTuple(args, "");
+    rabbit_doubleclick();
+    return Py_BuildValue("");
 }
 
+int _lua_rabbit_doubleclick(lua_State * L) {
+    int argc = lua_gettop(L);
+    rabbit_doubleclick();
+    return 0;
+}
 
+PyObject * _python_rabbit_rightclick(PyObject * self, PyObject * args) {
+    int tupleret = PyArg_ParseTuple(args, "");
+    rabbit_rightclick();
+    return Py_BuildValue("");
+}
 
-luaL_Reg rabbitlib[] = {
-	{ "keypress", _lua_rabbit_keypress },
-	{ "sleep", _lua_rabbit_sleep },
-	{ "click", _lua_rabbit_click },
-	{ "rightclick", _lua_rabbit_rightclick },
-	{ "doubleclick", _lua_rabbit_doubleclick },
-	{ "moveto", _lua_rabbit_moveto },
-	{ "findcolor", _lua_rabbit_findcolor },
-	{ NULL, NULL }
+int _lua_rabbit_rightclick(lua_State * L) {
+    int argc = lua_gettop(L);
+    rabbit_rightclick();
+    return 0;
+}
+
+PyObject * _python_rabbit_findcolor(PyObject * self, PyObject * args) {
+    int ret_0;
+    int ret_1;
+    unsigned int arg_0;
+    unsigned int arg_1;
+    unsigned int arg_2;
+    unsigned int arg_3;
+    unsigned int arg_4;
+    double arg_5;
+    int tupleret = PyArg_ParseTuple(args, "IIIIId", &arg_0, &arg_1, &arg_2, &arg_3, &arg_4, &arg_5);
+    rabbit_findcolor(&ret_0, &ret_1, arg_0, arg_1, arg_2, arg_3, arg_4, arg_5);
+    return Py_BuildValue("ii", ret_0, ret_1);
+}
+
+int _lua_rabbit_findcolor(lua_State * L) {
+    int argc = lua_gettop(L);
+    int ret_0;
+    int ret_1;
+    unsigned int arg_0 = lua_tounsigned(L, 1);
+    unsigned int arg_1 = lua_tounsigned(L, 2);
+    unsigned int arg_2 = lua_tounsigned(L, 3);
+    unsigned int arg_3 = lua_tounsigned(L, 4);
+    unsigned int arg_4 = lua_tounsigned(L, 5);
+    double arg_5 = lua_tonumber(L, 6);
+    rabbit_findcolor(&ret_0, &ret_1, arg_0, arg_1, arg_2, arg_3, arg_4, arg_5);
+    lua_pushinteger(L, ret_0);
+    lua_pushinteger(L, ret_1);
+    return 2;
+}
+
+PyObject * _python_rabbit_mouse_fetch_cursor(PyObject * self, PyObject * args) {
+    unsigned int ret_0;
+    int tupleret = PyArg_ParseTuple(args, "");
+    rabbit_mouse_fetch_cursor(&ret_0);
+    return Py_BuildValue("I", ret_0);
+}
+
+int _lua_rabbit_mouse_fetch_cursor(lua_State * L) {
+    int argc = lua_gettop(L);
+    unsigned int ret_0;
+    rabbit_mouse_fetch_cursor(&ret_0);
+    lua_pushunsigned(L, ret_0);
+    return 1;
+}
+
+luaL_Reg _rabbit_lib[] = {
+    { "sleep", _lua_rabbit_sleep },
+    { "keypress", _lua_rabbit_keypress },
+    { "moveto", _lua_rabbit_moveto },
+    { "click", _lua_rabbit_click },
+    { "doubleclick", _lua_rabbit_doubleclick },
+    { "rightclick", _lua_rabbit_rightclick },
+    { "findcolor", _lua_rabbit_findcolor },
+    { "mouse_fetch_cursor", _lua_rabbit_mouse_fetch_cursor },
+    { NULL, NULL }
 };
 
-PyMethodDef rabbitdefs[] = {
-	{ "keypress", _python_rabbit_keypress, METH_VARARGS, NULL },
-	{ "sleep", _python_rabbit_sleep, METH_VARARGS, NULL },
-	{ "click", _python_rabbit_click, METH_VARARGS, NULL },
-	{ "rightclick", _python_rabbit_rightclick, METH_VARARGS, NULL },
-	{ "doubleclick", _python_rabbit_doubleclick, METH_VARARGS, NULL },
-	{ "moveto", _python_rabbit_moveto, METH_VARARGS, NULL },
-	{ "findcolor", _python_rabbit_findcolor, METH_VARARGS, NULL },
-	{ "get_cursor_hash", _python_rabbit_get_cursor_hash, METH_VARARGS, NULL },
-	
-	{ NULL, NULL, 0, NULL }
+PyMethodDef _rabbit_defs[] = {
+    { "sleep", _python_rabbit_sleep, METH_VARARGS, NULL },
+    { "keypress", _python_rabbit_keypress, METH_VARARGS, NULL },
+    { "moveto", _python_rabbit_moveto, METH_VARARGS, NULL },
+    { "click", _python_rabbit_click, METH_VARARGS, NULL },
+    { "doubleclick", _python_rabbit_doubleclick, METH_VARARGS, NULL },
+    { "rightclick", _python_rabbit_rightclick, METH_VARARGS, NULL },
+    { "findcolor", _python_rabbit_findcolor, METH_VARARGS, NULL },
+    { "mouse_fetch_cursor", _python_rabbit_mouse_fetch_cursor, METH_VARARGS, NULL },
+    { NULL, NULL, 0, NULL }
 };
 
 void rabbit_init(RABBIT_MODE mode, void * instance) {
-	if (mode == RABBIT_MODE_LUA) {
-		lua_State * L = (lua_State *)instance;
-		luaL_newlib(L, rabbitlib);
-		lua_setglobal(L, "rabbit");
-	}
-	else {
-		Py_InitModule("rabbit", rabbitdefs);
-		PyRun_SimpleString("import rabbit");
-	}
+    if (mode == RABBIT_MODE_LUA) {
+        lua_State * L = (lua_State *)instance;
+        luaL_newlib(L, _rabbit_lib);
+        lua_setglobal(L, "rabbit");
+    }
+    else {
+        Py_InitModule("rabbit", _rabbit_defs);
+        PyRun_SimpleString("import rabbit");
+    }
 }

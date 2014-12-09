@@ -148,7 +148,7 @@ static unsigned int crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
 };
 #define UPDC32(octet,crc) (crc_32_tab[((crc) ^ ((BYTE)octet)) & 0xff] ^ ((crc) >> 8))
 
-bool rabbit_get_cursor_hash(unsigned int * ret_hash) {
+bool rabbit_mouse_fetch_cursor(unsigned int * ret_hash) {
 
 	// get cursor size
 	int cx = GetSystemMetrics(SM_CXCURSOR);
@@ -201,43 +201,46 @@ inline bool checkcolor(unsigned int color, BYTE * buff, double tolerance, int x,
 	if (x < 0 || y < 0) return false;
 	if (x >= w || y >= h) return false;
 
+
 	int offset = (y*w+x)*4;
 
 	int b = buff[offset++];
 	int g = buff[offset++];
 	int r = buff[offset++];
-	int rx = (color & 0xFF0000) >> 16;
-	int gx = (color & 0x00FF00) >> 8;
-	int bx = (color & 0x0000FF) >> 8;
+	int tr = (color & 0xFF0000) >> 16;
+	int tg = (color & 0x00FF00) >> 8;
+	int tb = (color & 0x0000FF);
+	int xr = r - tr;
+	int xg = g - tg;
+	int xb = b - tb;
+	int ar = abs(xr);
+	int ag = abs(xg);
+	int ab = abs(xb);
 
-	int ar = abs(r - rx);
-	int ag = abs(g - gx);
-	int ab = abs(b - bx);
-	int dis = pow(ar, 1.5) + pow(ab, 1.5) + pow(ag, 1.5);
-	/*
-	
-	ar = pow(ar, 1.5);
-	ab = pow(ab, 1.5);
-	ag = pow(ag, 1.5);
-	*/
-	//printf("%d %d %d\n", r, g, b);
-	// printf("%d %lf\n", dis, tolerance);
-	
+	int dis = ar + ag + ab;
+	int disx = 0;
+	if ((xr>0 && xg > 0 && xb > 0) || (xr < 0 && xg < 0 && xb < 0)) {
+		disx = min(ar, ag);
+		disx = min(disx, ab);
+		dis -= disx;
+	}
+
 	if (dis <= tolerance) {
+		printf("%d %lf\n", dis, tolerance);
 		return true;
 	}
 	return false;
 }
 
-bool rabbit_findcolor(int * ret_x, int * ret_y,
-	unsigned int color,
+bool screen_search_color(int * ret_x, int * ret_y,
+	unsigned int mode, unsigned int color,
 	unsigned int x, unsigned int y, unsigned int w, unsigned int h,
-	unsigned int order, double tolerance
+	double tolerance
 	) {
 
 	// prepare byte array cache
 	HANDLE hheap = GetProcessHeap();
-	DWORD len_cache = w*h*4;
+	DWORD len_cache = w*h * 4;
 	void * cache = HeapAlloc(hheap, HEAP_ZERO_MEMORY, len_cache);
 
 	// fetch cursor into byte array
@@ -260,12 +263,11 @@ bool rabbit_findcolor(int * ret_x, int * ret_y,
 
 	BYTE * map = (BYTE *)cache;
 
-	tolerance = pow(tolerance, 2);
-	tolerance *= 3072;
+	tolerance *= tolerance;
+	tolerance *= 512;
 
-	printf("%lf\n", tolerance);
 
-	int mx = (w+1)/2, my = (h+1)/2;
+	int mx = (w + 1) / 2, my = (h + 1) / 2;
 	int sx, sy = 0;
 	int j, k = 0;
 	bool found = false;
@@ -301,13 +303,21 @@ bool rabbit_findcolor(int * ret_x, int * ret_y,
 
 	if (found) {
 		*ret_x = x + sx;
-		*ret_y = y + h-sy;
+		*ret_y = y + h - sy;
 	}
 	else {
 		*ret_x = -1;
 		*ret_y = -1;
 	}
-	
+
 	HeapFree(hheap, NULL, cache);
 	return true;
+}
+
+bool rabbit_findcolor(int * ret_x, int * ret_y,
+	unsigned int color,
+	unsigned int x, unsigned int y, unsigned int w, unsigned int h,
+	double tolerance
+	) {
+	return screen_search_color(ret_x, ret_y, 0, color, x, y, w, h, tolerance);
 }

@@ -68,11 +68,14 @@ void rabbit_string(RABBIT_MODE mode, char * script)
 
 void rabbit_file(RABBIT_MODE mode, LPCTSTR path)
 {
-	char * script;
+	char * script = NULL;
 	DWORD size;
 	load_script(path, script, size);
-	rabbit_string(mode, script);
-	delete script;
+	if (script != NULL) {
+		rabbit_string(mode, script);
+		delete script;
+	} else {
+	}
 }
 
 
