@@ -39,8 +39,11 @@ void rabbit_keypress(const char * key) {
 	int len = strlen(key);
 	wchar_t keyname[16];
 	MultiByteToWideChar(CP_UTF8, NULL, key, len, keyname, 16);
-	if (keyname[0] == L'1') {
-		_rabbit_kayboard_vkey_press(0x31);
+	if (keyname[0] >= L'0' && keyname[0] <= L'9') {
+		_rabbit_kayboard_vkey_press(0x30 + (keyname[0] - L'0'));
+	}
+	else if (keyname[0] >= L'A' && keyname[0] <= L'Z') {
+		_rabbit_kayboard_vkey_press(0x41 + (keyname[0] - L'A'));
 	}
 	else {
 		_rabbit_kayboard_wchar_press(keyname[0]);
@@ -201,7 +204,6 @@ inline bool checkcolor(unsigned int color, BYTE * buff, double tolerance, int x,
 	if (x < 0 || y < 0) return false;
 	if (x >= w || y >= h) return false;
 
-
 	int offset = (y*w+x)*4;
 
 	int b = buff[offset++];
@@ -262,10 +264,7 @@ bool screen_search_color(int * ret_x, int * ret_y,
 	ReleaseDC(NULL, hdc_screen);
 
 	BYTE * map = (BYTE *)cache;
-
-	tolerance *= tolerance;
-	tolerance *= 512;
-
+	tolerance = tolerance * 512 * 0.618;
 
 	int mx = (w + 1) / 2, my = (h + 1) / 2;
 	int sx, sy = 0;
