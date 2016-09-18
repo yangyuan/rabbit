@@ -90,13 +90,13 @@ void rabbit_moveto(unsigned int x, unsigned int y) {
 	input.type = INPUT_MOUSE;
 	input.mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
 
-	double fScreenWidth = GetSystemMetrics(SM_CXSCREEN) - 1;
-	double fScreenHeight = GetSystemMetrics(SM_CYSCREEN) - 1;
-	double dx = x *65535.0f / fScreenWidth;
-	double dy = y *65535.0f / fScreenHeight;
+	double fScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+	double fScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+	double dx = x * 65536.0f / fScreenWidth;
+	double dy = y * 65536.0f / fScreenHeight;
 
-	input.mi.dx = dx;
-	input.mi.dy = dy;
+	input.mi.dx = (LONG)dx;
+	input.mi.dy = (LONG)dy;
 	SendInput(1, &input, sizeof(INPUT));
 }
 
@@ -188,7 +188,7 @@ bool rabbit_mouse_fetch_cursor(unsigned int * ret_hash) {
 	// use crc32 to get hash
 	DWORD hash = 0xFFFFFFFF;
 	BYTE * tmp = (BYTE *) cache;
-	for (int i = 0; i<len_cache; i++)
+	for (unsigned int i = 0; i<len_cache; i++)
 	{
 		hash = UPDC32(*tmp, hash);
 		tmp++;
@@ -268,7 +268,7 @@ bool screen_search_color(int * ret_x, int * ret_y,
 
 	int mx = (w + 1) / 2, my = (h + 1) / 2;
 	int sx, sy = 0;
-	int j, k = 0;
+	int k = 0;
 	bool found = false;
 	for (int i = 0; i < 65536; i++) {
 		sx = mx - i;

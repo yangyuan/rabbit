@@ -69,7 +69,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				Beep(700, 125);
 				Beep(400, 125);
 				if (ThreadHandle != NULL) {
-					bool tret = TerminateThread(ThreadHandle, 0);
+					BOOL tret = TerminateThread(ThreadHandle, 0);
 					if (tret) {
 						ThreadHandle = NULL;
 					}
