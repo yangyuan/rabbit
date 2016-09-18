@@ -1,7 +1,8 @@
 Rabbit
 ======
+![Build Status](https://6941987.visualstudio.com/_apis/public/build/definitions/11759935-74e5-4a06-843f-9794d369a62d/2/badge)
 
-a simple bot engine, both lua and python are supported.
+A simple bot engine, both lua and python are supported.
 
 #### 定位
 我对 Rabbit 的定位是个 按键精灵 替代品。由于经常写一些自动脚本，对按键精灵这种软件有一定需求。
