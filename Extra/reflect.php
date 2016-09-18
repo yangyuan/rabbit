@@ -17,6 +17,8 @@ $funcs = array (
 	array ('rightclick', '', ''),
 	array ('findcolor', 'ii', 'IIIIId'),
 	array ('mouse_fetch_cursor', 'I', ''),
+	array ('findwindow', 'K', 's'),
+	array ('get_window_rect', 'iiii', 'K'),
 );
 
 function fetch_type_c($type) {
@@ -33,6 +35,12 @@ function fetch_type_c($type) {
 		case 'I':
 			return 'unsigned int';
 			break;
+		case 'L':
+			return 'long long';
+			break;
+		case 'K':
+			return 'unsigned long long';
+			break;
 		case 'd':
 			return 'double';
 			break;
@@ -48,9 +56,11 @@ function fetch_type_lua($type) {
 			return 'string';
 			break;
 		case 'i':
+		case 'L':
 			return 'integer';
 			break;
 		case 'I':
+		case 'K':
 			return 'unsigned';
 			break;
 		case 'd':

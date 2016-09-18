@@ -38,3 +38,7 @@ bool rabbit_mouse_fetch_cursor(unsigned int * ret_hash);
 
 bool rabbit_screen_search_color(int * ret_x, int * ret_y, unsigned int mode, unsigned int color, unsigned int x, unsigned int y, unsigned int w, unsigned int h, double tolerance);
 
+
+
+void rabbit_findwindow(unsigned long long * window, const char * window_name);
+void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned long long window);

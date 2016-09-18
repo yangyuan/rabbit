@@ -320,3 +320,16 @@ bool rabbit_findcolor(int * ret_x, int * ret_y,
 	) {
 	return screen_search_color(ret_x, ret_y, 0, color, x, y, w, h, tolerance);
 }
+
+void rabbit_findwindow(unsigned long long * window, const char * window_name) {
+	*window = (unsigned long) FindWindowA(NULL, window_name);
+}
+
+void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned long long window) {
+	RECT rect;
+	GetWindowRect((HWND)window, &rect);
+	*ret_x = rect.left;
+	*ret_y = rect.top;
+	*ret_w = rect.right - rect.left;
+	*ret_h = rect.bottom - rect.top;
+}
