@@ -30,6 +30,20 @@ int _lua_rabbit_keypress(lua_State * L) {
 	return 0;
 }
 
+PyObject * _python_rabbit_input(PyObject * self, PyObject * args) {
+	const char * arg_0;
+	int tupleret = PyArg_ParseTuple(args, "s", &arg_0);
+	rabbit_input(arg_0);
+	return Py_BuildValue("");
+}
+
+int _lua_rabbit_input(lua_State * L) {
+	int argc = lua_gettop(L);
+	const char * arg_0 = lua_tostring(L, 1);
+	rabbit_input(arg_0);
+	return 0;
+}
+
 PyObject * _python_rabbit_moveto(PyObject * self, PyObject * args) {
 	unsigned int arg_0;
 	unsigned int arg_1;
@@ -128,16 +142,16 @@ int _lua_rabbit_mouse_fetch_cursor(lua_State * L) {
 }
 
 PyObject * _python_rabbit_findwindow(PyObject * self, PyObject * args) {
-	unsigned long long ret_0;
+	unsigned int ret_0;
 	const char * arg_0;
 	int tupleret = PyArg_ParseTuple(args, "s", &arg_0);
 	rabbit_findwindow(&ret_0, arg_0);
-	return Py_BuildValue("K", ret_0);
+	return Py_BuildValue("I", ret_0);
 }
 
 int _lua_rabbit_findwindow(lua_State * L) {
 	int argc = lua_gettop(L);
-	unsigned long long ret_0;
+	unsigned int ret_0;
 	const char * arg_0 = lua_tostring(L, 1);
 	rabbit_findwindow(&ret_0, arg_0);
 	lua_pushunsigned(L, ret_0);
@@ -149,8 +163,8 @@ PyObject * _python_rabbit_get_window_rect(PyObject * self, PyObject * args) {
 	int ret_1;
 	int ret_2;
 	int ret_3;
-	unsigned long long arg_0;
-	int tupleret = PyArg_ParseTuple(args, "K", &arg_0);
+	unsigned int arg_0;
+	int tupleret = PyArg_ParseTuple(args, "I", &arg_0);
 	rabbit_get_window_rect(&ret_0, &ret_1, &ret_2, &ret_3, arg_0);
 	return Py_BuildValue("iiii", ret_0, ret_1, ret_2, ret_3);
 }
@@ -161,7 +175,7 @@ int _lua_rabbit_get_window_rect(lua_State * L) {
 	int ret_1;
 	int ret_2;
 	int ret_3;
-	unsigned long long arg_0 = lua_tounsigned(L, 1);
+	unsigned int arg_0 = lua_tounsigned(L, 1);
 	rabbit_get_window_rect(&ret_0, &ret_1, &ret_2, &ret_3, arg_0);
 	lua_pushinteger(L, ret_0);
 	lua_pushinteger(L, ret_1);
@@ -173,6 +187,7 @@ int _lua_rabbit_get_window_rect(lua_State * L) {
 luaL_Reg _rabbit_lib[] = {
 	{ "sleep", _lua_rabbit_sleep },
 	{ "keypress", _lua_rabbit_keypress },
+	{ "input", _lua_rabbit_input },
 	{ "moveto", _lua_rabbit_moveto },
 	{ "click", _lua_rabbit_click },
 	{ "doubleclick", _lua_rabbit_doubleclick },
@@ -187,6 +202,7 @@ luaL_Reg _rabbit_lib[] = {
 PyMethodDef _rabbit_defs[] = {
 	{ "sleep", _python_rabbit_sleep, METH_VARARGS, NULL },
 	{ "keypress", _python_rabbit_keypress, METH_VARARGS, NULL },
+	{ "input", _python_rabbit_input, METH_VARARGS, NULL },
 	{ "moveto", _python_rabbit_moveto, METH_VARARGS, NULL },
 	{ "click", _python_rabbit_click, METH_VARARGS, NULL },
 	{ "doubleclick", _python_rabbit_doubleclick, METH_VARARGS, NULL },

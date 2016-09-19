@@ -22,38 +22,42 @@ void _rabbit_kayboard_vkey_press(WORD vkey) {
 	INPUT input[2];
 	ZeroMemory(input, 2 * sizeof(INPUT));
 
+	const UINT vKey = MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
+
 	input[0].type = INPUT_KEYBOARD;
-	input[0].ki.wVk = vkey;
-	input[0].ki.wScan = 0;
-	input[0].ki.dwFlags = NULL;
+	input[0].ki.wVk = 0;
+	input[0].ki.wScan = vKey;
+	input[0].ki.dwFlags = KEYEVENTF_SCANCODE;
 
 	input[1].type = INPUT_KEYBOARD;
-	input[1].ki.wVk = vkey;
-	input[1].ki.wScan = 0;
-	input[1].ki.dwFlags = KEYEVENTF_KEYUP;
+	input[1].ki.wVk = 0;
+	input[1].ki.wScan = vKey;
+	input[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
 
-	SendInput(2, input, sizeof(INPUT));
+	SendInput(1, input, sizeof(INPUT));
+	Sleep(50);
+	SendInput(1, input+1, sizeof(INPUT));
 }
 
 void rabbit_keypress(const char * key) {
-	int len = strlen(key);
-	wchar_t keyname[16];
-	MultiByteToWideChar(CP_UTF8, NULL, key, len, keyname, 16);
-	if (keyname[0] >= L'0' && keyname[0] <= L'9') {
-		_rabbit_kayboard_vkey_press(0x30 + (keyname[0] - L'0'));
-	}
-	else if (keyname[0] >= L'A' && keyname[0] <= L'Z') {
-		_rabbit_kayboard_vkey_press(0x41 + (keyname[0] - L'A'));
-	}
-	else {
-		_rabbit_kayboard_wchar_press(keyname[0]);
+	if ((key[0] >= '0' && key[0] <= '9') || (key[0] >= 'A' && key[0] <= 'Z') || (key[0] >= 'a' && key[0] <= 'z')) {
+		_rabbit_kayboard_vkey_press(key[0]);
 	}
 }
 
-void rabbit_vkeypress(int vkey) {
-	_rabbit_kayboard_vkey_press((WORD)vkey);
-}
+void rabbit_input(const char * text) {
+	int len = strlen(text);
+	wchar_t utext[256];
+	ZeroMemory(utext, 256 * sizeof(wchar_t));
+	MultiByteToWideChar(CP_UTF8, NULL, text, len, utext, 255);
 
+	for (int i = 0; i < 256; i++) {
+		if (utext[i] == L'\0') {
+			break;
+		}
+		_rabbit_kayboard_wchar_press(utext[i]);
+	}
+}
 
 void rabbit_click() {
 	INPUT input[2];
@@ -321,11 +325,11 @@ bool rabbit_findcolor(int * ret_x, int * ret_y,
 	return screen_search_color(ret_x, ret_y, 0, color, x, y, w, h, tolerance);
 }
 
-void rabbit_findwindow(unsigned long long * window, const char * window_name) {
-	*window = (unsigned long) FindWindowA(NULL, window_name);
+void rabbit_findwindow(unsigned int * window, const char * window_name) {
+	*window = (unsigned int) FindWindowA(NULL, window_name);
 }
 
-void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned long long window) {
+void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned int window) {
 	RECT rect;
 	GetWindowRect((HWND)window, &rect);
 	*ret_x = rect.left;

@@ -3,6 +3,7 @@
 void rabbit_sleep(unsigned int milliseconds);
 
 void rabbit_keypress(const char * key);
+void rabbit_input(const char * text);
 void rabbit_moveto(unsigned int x, unsigned int y);
 void rabbit_click();
 void rabbit_doubleclick();
@@ -40,5 +41,5 @@ bool rabbit_screen_search_color(int * ret_x, int * ret_y, unsigned int mode, uns
 
 
 
-void rabbit_findwindow(unsigned long long * window, const char * window_name);
-void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned long long window);
+void rabbit_findwindow(unsigned int * window, const char * window_name);
+void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned int window);

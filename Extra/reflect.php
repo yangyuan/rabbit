@@ -11,14 +11,15 @@ $incs = array (
 $funcs = array (
 	array ('sleep', '', 'I'),
 	array ('keypress', '', 's'),
+	array ('input', '', 's'),
 	array ('moveto', '', 'II'),
 	array ('click', '', ''),
 	array ('doubleclick', '', ''),
 	array ('rightclick', '', ''),
 	array ('findcolor', 'ii', 'IIIIId'),
 	array ('mouse_fetch_cursor', 'I', ''),
-	array ('findwindow', 'K', 's'),
-	array ('get_window_rect', 'iiii', 'K'),
+	array ('findwindow', 'I', 's'),
+	array ('get_window_rect', 'iiii', 'I'),
 );
 
 function fetch_type_c($type) {
@@ -34,12 +35,6 @@ function fetch_type_c($type) {
 			break;
 		case 'I':
 			return 'unsigned int';
-			break;
-		case 'L':
-			return 'long long';
-			break;
-		case 'K':
-			return 'unsigned long long';
 			break;
 		case 'd':
 			return 'double';
