@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Extra\Python;$(SolutionDir)Extra\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extra\Python;$(SolutionDir)Extra\JavaScript;$(SolutionDir)Extra\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/D _CRT_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -75,7 +75,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Extra\Python;$(SolutionDir)Extra\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extra\Python;$(SolutionDir)Extra\JavaScript;$(SolutionDir)Extra\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/D _CRT_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -91,6 +91,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Extra\JavaScript\v7.h" />
     <ClInclude Include="..\Extra\Lua\lapi.h" />
     <ClInclude Include="..\Extra\Lua\lauxlib.h" />
     <ClInclude Include="..\Extra\Lua\lcode.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="rabbit_core.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Extra\JavaScript\v7.c" />
     <ClCompile Include="..\Extra\Lua\lapi.c" />
     <ClCompile Include="..\Extra\Lua\lauxlib.c" />
     <ClCompile Include="..\Extra\Lua\lbaselib.c" />

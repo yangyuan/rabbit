@@ -13,3 +13,4 @@
 #undef _DEBUG_PYTHON
 #define _DEBUG
 #endif
+#include <v7.h>

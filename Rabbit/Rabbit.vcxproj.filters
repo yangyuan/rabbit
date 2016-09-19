@@ -16,6 +16,9 @@
     <Filter Include="Lua">
       <UniqueIdentifier>{47e6c68b-22d5-46eb-a95e-1d3b471413fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JavaScript">
+      <UniqueIdentifier>{546ee16c-f097-4e54-9ab7-f392e2b57094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="..\Extra\Lua\lzio.h">
       <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Extra\JavaScript\v7.h">
+      <Filter>JavaScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="..\Extra\Lua\lzio.c">
       <Filter>Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Extra\JavaScript\v7.c">
+      <Filter>JavaScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
