@@ -19,6 +19,7 @@ $funcs = array (
 	array ('findcolor', 'ii', 'IIIIId'),
 	array ('mouse_fetch_cursor', 'I', ''),
 	array ('findwindow', 'I', 's'),
+	array ('find_window', 'I', 'ss'),
 	array ('get_window_rect', 'iiii', 'I'),
 );
 

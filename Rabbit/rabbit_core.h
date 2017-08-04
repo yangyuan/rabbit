@@ -42,4 +42,5 @@ bool rabbit_screen_search_color(int * ret_x, int * ret_y, unsigned int mode, uns
 
 
 void rabbit_findwindow(unsigned int * window, const char * window_name);
+void rabbit_find_window(unsigned int * window, const char * window_name, const char * class_name);
 void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned int window);

@@ -329,6 +329,10 @@ void rabbit_findwindow(unsigned int * window, const char * window_name) {
 	*window = (unsigned int) FindWindowA(NULL, window_name);
 }
 
+void rabbit_find_window(unsigned int * window, const char * window_name,const char * class_name) {
+	*window = (unsigned int)FindWindowA(class_name, window_name);
+}
+
 void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned int window) {
 	RECT rect;
 	GetWindowRect((HWND)window, &rect);
