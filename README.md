@@ -2,6 +2,15 @@ Rabbit
 ======
 ![Build Status](https://6941987.visualstudio.com/_apis/public/build/definitions/11759935-74e5-4a06-843f-9794d369a62d/2/badge)
 
+Refactorying on going.
+
+The Rabbit Project contains two sub-projects:
+### Rabbit App
+An application with embedded scripting support, an alternative of QuickMacro.
+### Rabbit-Bot Packages
+Packages for Python, JavaScript, Lua
+
+## Legacy README
 A simple bot engine, both lua and python are supported.
 
 #### 定位
