@@ -15,8 +15,6 @@ class CodeGenerator:
             return 'unsigned int'
         if _type == 'd':
             return 'double'
-        if _type == '':
-            return 'const void *'
 
     def get_header_code(self):
         raise NotImplemented()
@@ -38,6 +36,7 @@ class CodeGenerator:
         codes.extend(self.get_module_code(_module))
 
         return '\n'.join(codes)
+
 
 
 class PythonCodeGenerator(CodeGenerator):
@@ -89,6 +88,68 @@ class PythonCodeGenerator(CodeGenerator):
         return ret
 
 
+class LuaCodeGenerator(CodeGenerator):
+    def __init__(self):
+        super().__init__()
+        pass
+
+    @staticmethod
+    def to_type_lua(_type):
+        if _type == 's':
+            return 'string'
+        if _type == 'i' or _type == 'I':
+            return 'integer'
+        if _type == 'd':
+            return 'number'
+
+    def get_header_code(self):
+        return ['#include <lua.hpp>', '#include "rabbit_core.h"\n']
+
+    def get_module_code(self, _module):
+
+        ret = []
+
+        _code = 'luaL_Reg _rabbit_methods[] = {\n'
+        for _name, _, _ in _module:
+            _code += ('    { "%s", _lua_%s },\n' % (_name, _name))
+        _code += '    { NULL, NULL }\n'
+        _code += '};\n'
+        ret.append(_code)
+
+        return ret
+
+    def get_function_code(self, _name, _returns, _arguments):
+
+        var_returns = []
+        var_arguments = []
+        for _return, _index in zip(_returns, itertools.count()):
+            var_returns.append((self.to_type_cpp(_return),
+                                ('ret_%d' % _index),
+                                self.to_type_lua(_return)))
+        for _argument, _index in zip(_arguments, itertools.count()):
+            var_arguments.append((self.to_type_cpp(_argument),
+                                  ('arg_%d' % _index),
+                                  self.to_type_lua(_argument),
+                                  _index + 1))
+
+        ret = ('int _lua_%s(lua_State * L) {\n' % _name)
+
+        for var_return in var_returns:
+            ret += ('    %s %s;\n' % var_return[0:2])
+        for var_argument in var_arguments:
+            ret += ('    %s %s = lua_to%s(L, %d);\n' % var_argument)
+
+        ret += ('    rabbit_%s(%s);\n'
+                % (_name, ' ,'.join(['&' + x[1] for x in var_returns] + [x[1] for x in var_arguments])))
+        for var_return in var_returns:
+            ret += ('    lua_push%s(L, %s);\n' % (var_return[2], var_return[1]))
+        ret += ('    return %d;\n' % len(_returns))
+
+        ret += '}\n'
+
+        return ret
+
+
 module_conf = [
     ('sleep', '', 'I'),
     ('keypress', '', 's'),
@@ -110,4 +171,10 @@ if __name__ == '__main__':
     code = gen.get_code(module_conf)
 
     with open('../src/python/rabbit_python.cpp', 'w') as f:
+        f.write(code)
+
+    gen = LuaCodeGenerator()
+    code = gen.get_code(module_conf)
+
+    with open('../src/lua/rabbit_lua.cpp', 'w') as f:
         f.write(code)

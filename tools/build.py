@@ -45,5 +45,6 @@ if __name__ == '__main__':
 
     copy_dir(os.path.join(path_root, 'src', 'python'), path_dist_python)
     copy_dir(os.path.join(path_root, 'src', 'core'), path_dist_python)
+    copy_dir(os.path.join(path_root, 'src', 'javascript'), path_dist_javascript)
     copy_dir(os.path.join(path_root, 'src', 'core'), path_dist_javascript)
 
