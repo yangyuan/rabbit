@@ -2,7 +2,7 @@
   "targets": [
     {
       "target_name": "rabbit",
-      "sources": [ "hello.cpp" ]
+      "sources": [ "main.cpp", "rabbit_javascript.cpp" ]
     }
   ]
 }
