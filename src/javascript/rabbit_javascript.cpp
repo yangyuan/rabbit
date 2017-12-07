@@ -1,6 +1,8 @@
 #include <node.h>
 #include "rabbit_core.h"
 
+using namespace v8;
+
 void _javascript_sleep(const FunctionCallbackInfo<Value>& args) {
     unsigned int arg_0 = _javascript_to_uint32(args, 1);
     rabbit_sleep(arg_0);
@@ -89,7 +91,7 @@ void _javascript_get_window_rect(const FunctionCallbackInfo<Value>& args) {
     args.GetReturnValue().Set(ret);
 }
 
-void _rabbit_init(Local<Object> exports) {
+void _rabbit_javascript_init(Local<Object> exports) {
     NODE_SET_METHOD(exports, "sleep", _javascript_sleep);
     NODE_SET_METHOD(exports, "keypress", _javascript_keypress);
     NODE_SET_METHOD(exports, "input", _javascript_input);

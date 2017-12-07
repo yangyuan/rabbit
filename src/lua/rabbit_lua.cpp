@@ -94,7 +94,7 @@ int _lua_get_window_rect(lua_State * L) {
     return 4;
 }
 
-luaL_Reg _rabbit_methods[] = {
+luaL_Reg _rabbit_lua_methods[] = {
     { "sleep", _lua_sleep },
     { "keypress", _lua_keypress },
     { "input", _lua_input },
@@ -108,4 +108,9 @@ luaL_Reg _rabbit_methods[] = {
     { "find_window", _lua_find_window },
     { "get_window_rect", _lua_get_window_rect },
     { NULL, NULL }
+};
+
+void rabbit_init_lua (lua_State * L) {
+    luaL_newlib(L, _rabbit_lua_methods);
+    lua_setglobal(L, "rabbit");
 };

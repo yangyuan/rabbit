@@ -97,7 +97,7 @@ PyObject * _python_get_window_rect(PyObject * self, PyObject * args) {
     return Py_BuildValue("iiii", ret_0, ret_1, ret_2, ret_3);
 }
 
-PyMethodDef _rabbit_methods[] = {
+PyMethodDef _rabbit_python_methods[] = {
     { "sleep", _python_sleep, METH_VARARGS, NULL },
     { "keypress", _python_keypress, METH_VARARGS, NULL },
     { "input", _python_input, METH_VARARGS, NULL },
@@ -111,4 +111,13 @@ PyMethodDef _rabbit_methods[] = {
     { "find_window", _python_find_window, METH_VARARGS, NULL },
     { "get_window_rect", _python_get_window_rect, METH_VARARGS, NULL },
     { NULL, NULL, 0, NULL }
+};
+
+static struct PyModuleDef rabbit_python = {
+    PyModuleDef_HEAD_INIT, "rabbit", NULL, -1,
+    _rabbit_python_methods, NULL, NULL, NULL, NULL
+};
+
+PyObject * PyInit_rabbit() {
+    return PyModule_Create(&rabbit_python);
 };

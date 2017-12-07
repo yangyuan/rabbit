@@ -38,7 +38,6 @@ class CodeGenerator:
         return '\n'.join(codes)
 
 
-
 class PythonCodeGenerator(CodeGenerator):
     def __init__(self):
         super().__init__()
@@ -51,10 +50,21 @@ class PythonCodeGenerator(CodeGenerator):
 
         ret = []
 
-        _code = 'PyMethodDef _rabbit_methods[] = {\n'
+        _code = 'PyMethodDef _rabbit_python_methods[] = {\n'
         for _name, _, _ in _module:
             _code += ('    { "%s", _python_%s, METH_VARARGS, NULL },\n' % (_name, _name))
         _code += '    { NULL, NULL, 0, NULL }\n'
+        _code += '};\n'
+        ret.append(_code)
+
+        _code = 'static struct PyModuleDef rabbit_python = {\n'
+        _code += '    PyModuleDef_HEAD_INIT, "rabbit", NULL, -1,\n'
+        _code += '    _rabbit_python_methods, NULL, NULL, NULL, NULL\n'
+        _code += '};\n'
+        ret.append(_code)
+
+        _code = 'static PyObject * PyInit_rabbit(void) {\n'
+        _code += '    return PyModule_Create(&rabbit_python);\n'
         _code += '};\n'
         ret.append(_code)
 
@@ -109,10 +119,16 @@ class LuaCodeGenerator(CodeGenerator):
 
         ret = []
 
-        _code = 'luaL_Reg _rabbit_methods[] = {\n'
+        _code = 'luaL_Reg _rabbit_lua_methods[] = {\n'
         for _name, _, _ in _module:
             _code += ('    { "%s", _lua_%s },\n' % (_name, _name))
         _code += '    { NULL, NULL }\n'
+        _code += '};\n'
+        ret.append(_code)
+
+        _code = 'void rabbit_init_lua (lua_State * L) {\n'
+        _code += '    luaL_newlib(L, _rabbit_lua_methods);\n'
+        _code += '    lua_setglobal(L, "rabbit");\n'
         _code += '};\n'
         ret.append(_code)
 
@@ -167,13 +183,13 @@ class JavaScriptCodeGenerator(CodeGenerator):
             return 'number'
 
     def get_header_code(self):
-        return ['#include <node.h>', '#include "rabbit_core.h"\n']
+        return ['#include <node.h>', '#include "rabbit_core.h"\n', 'using namespace v8;\n']
 
     def get_module_code(self, _module):
 
         ret = []
 
-        _code = 'void _rabbit_init(Local<Object> exports) {\n'
+        _code = 'void _rabbit_javascript_init(Local<Object> exports) {\n'
         for _name, _, _ in _module:
             _code += ('    NODE_SET_METHOD(exports, "%s", _javascript_%s);\n' % (_name, _name))
         _code += '};\n'
