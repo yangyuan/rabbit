@@ -1,5 +1,54 @@
 #include "common.h"
 #include "rabbit_core.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void _rabbit_kayboard_wchar_press(wchar_t keychar);
+void _rabbit_kayboard_vkey_press(WORD vkey);
+
+// display a line of message
+void rabbit_log(wstring text) {
+	wcout << text << endl;
+}
+
+// directly input a string
+void rabbit_input(wstring text) {
+	int len = text.length();
+	for (wchar_t& c : text) {
+		_rabbit_kayboard_wchar_press(c);
+		Sleep(10);
+	}
+}
+
+// press a key
+void rabbit_press(wstring key) {
+	char text[256];
+	ZeroMemory(text, 256 * sizeof(char));
+	WideCharToMultiByte(CP_UTF8, NULL, key.c_str(), key.length(), text, 255, NULL, NULL);
+	string _key(text);
+
+	WORD vkey = NULL;
+	if ((_key[0] == 'F' || _key[0] == 'f') && (_key[1] >= '1' && _key[1] <= '9')) {
+		int fid = std::stoi(_key.substr(1));
+		if (fid > 0 && fid < 13) {
+			vkey = VK_F1 - 1 + fid;
+		}
+	} if ((_key[0] >= '0' && _key[0] <= '9') || (_key[0] >= 'A' && _key[0] <= 'Z') || (_key[0] >= 'a' && _key[0] <= 'z')) {
+		vkey = key[0];
+	}
+
+	if (vkey != NULL) {
+		_rabbit_kayboard_vkey_press(vkey);
+	}
+}
+
+void rabbit_keypress(const char * key) {
+	if ((key[0] >= '0' && key[0] <= '9') || (key[0] >= 'A' && key[0] <= 'Z') || (key[0] >= 'a' && key[0] <= 'z')) {
+		_rabbit_kayboard_vkey_press(key[0]);
+	}
+}
 
 void _rabbit_kayboard_wchar_press(wchar_t keychar) {
 	INPUT input[2];
@@ -39,11 +88,6 @@ void _rabbit_kayboard_vkey_press(WORD vkey) {
 	SendInput(1, input+1, sizeof(INPUT));
 }
 
-void rabbit_keypress(const char * key) {
-	if ((key[0] >= '0' && key[0] <= '9') || (key[0] >= 'A' && key[0] <= 'Z') || (key[0] >= 'a' && key[0] <= 'z')) {
-		_rabbit_kayboard_vkey_press(key[0]);
-	}
-}
 
 void rabbit_input(const char * text) {
 	int len = strlen(text);
@@ -341,6 +385,7 @@ void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, 
 	*ret_w = rect.right - rect.left;
 	*ret_h = rect.bottom - rect.top;
 }
+
 
 void rabbit_log(const char * text) {
 	printf("%s\n", text);
