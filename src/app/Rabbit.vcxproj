@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\v8-v141-x86.5.8.283.38\build\native\v8-v141-x86.props" Condition="Exists('packages\v8-v141-x86.5.8.283.38\build\native\v8-v141-x86.props')" />
+  <Import Project="packages\v8.redist-v141-x86.5.8.283.38\build\native\v8.redist-v141-x86.props" Condition="Exists('packages\v8.redist-v141-x86.5.8.283.38\build\native\v8.redist-v141-x86.props')" />
   <Import Project="packages\v8-v141-x64.5.8.283.38\build\native\v8-v141-x64.props" Condition="Exists('packages\v8-v141-x64.5.8.283.38\build\native\v8-v141-x64.props')" />
   <Import Project="packages\v8.redist-v141-x64.5.8.283.38\build\native\v8.redist-v141-x64.props" Condition="Exists('packages\v8.redist-v141-x64.5.8.283.38\build\native\v8.redist-v141-x64.props')" />
   <Import Project="packages\python.3.6.3\build\native\python.props" Condition="Exists('packages\python.3.6.3\build\native\python.props')" />
+  <Import Project="packages\pythonx86.3.6.3\build\native\python.props" Condition="Exists('packages\pythonx86.3.6.3\build\native\python.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -50,14 +53,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -96,6 +99,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,6 +117,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -138,17 +143,17 @@
     <Import Project="packages\lua.redist.5.3.4\build\native\lua.redist.targets" Condition="Exists('packages\lua.redist.5.3.4\build\native\lua.redist.targets')" />
     <Import Project="packages\lua.5.3.4\build\native\lua.targets" Condition="Exists('packages\lua.5.3.4\build\native\lua.targets')" />
   </ImportGroup>
-  <Target Name="CopyFiles">
-    <Copy SourceFiles="main.cpp" DestinationFolder="C:\~\Github\rabbit.2\src\path" />
-  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\python.3.6.3\build\native\python.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\python.3.6.3\build\native\python.props'))" />
+    <Error Condition="!Exists('packages\pythonx86.3.6.3\build\native\python.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\pythonx86.3.6.3\build\native\python.props'))" />
     <Error Condition="!Exists('packages\lua.redist.5.3.4\build\native\lua.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\lua.redist.5.3.4\build\native\lua.redist.targets'))" />
     <Error Condition="!Exists('packages\lua.5.3.4\build\native\lua.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\lua.5.3.4\build\native\lua.targets'))" />
     <Error Condition="!Exists('packages\v8.redist-v141-x64.5.8.283.38\build\native\v8.redist-v141-x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\v8.redist-v141-x64.5.8.283.38\build\native\v8.redist-v141-x64.props'))" />
     <Error Condition="!Exists('packages\v8-v141-x64.5.8.283.38\build\native\v8-v141-x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\v8-v141-x64.5.8.283.38\build\native\v8-v141-x64.props'))" />
+    <Error Condition="!Exists('packages\v8.redist-v141-x86.5.8.283.38\build\native\v8.redist-v141-x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\v8.redist-v141-x86.5.8.283.38\build\native\v8.redist-v141-x86.props'))" />
+    <Error Condition="!Exists('packages\v8-v141-x86.5.8.283.38\build\native\v8-v141-x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\v8-v141-x86.5.8.283.38\build\native\v8-v141-x86.props'))" />
   </Target>
 </Project>
