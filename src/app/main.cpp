@@ -30,6 +30,14 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 	}
 }
 
+BOOL FileExists(LPCTSTR szPath)
+{
+	DWORD dwAttrib = GetFileAttributes(szPath);
+
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+		!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	BOOL ret;
@@ -55,9 +63,20 @@ int _tmain(int argc, _TCHAR* argv[])
 				Beep(400, 125);
 				Beep(700, 125);
 				RABBIT_PROC proc;
-				proc.mode = RABBIT_MODE_PYTHON;
-				proc.path = _T("script.lua");
-				//proc.path = _T("script.lua");
+
+				if (FileExists(_T("script.py"))) {
+					proc.mode = RABBIT_MODE_PYTHON;
+					proc.path = _T("script.py");
+				} else if (FileExists(_T("script.js"))) {
+					proc.mode = RABBIT_MODE_JAVASCRIPT;
+					proc.path = _T("script.js");
+				} else if (FileExists(_T("script.lua"))) {
+					proc.mode = RABBIT_MODE_LUA;
+					proc.path = _T("script.lua");
+				} else {
+					printf(_T("no script file found."));
+				}
+
 				DWORD dwThreadId = NULL;
 				if (ThreadHandle == NULL) {
 					ThreadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&ThreadProc, (LPVOID)&proc, 0, &dwThreadId);

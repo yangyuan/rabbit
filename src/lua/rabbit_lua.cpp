@@ -1,6 +1,12 @@
 #include <lua.hpp>
 #include "rabbit_core.h"
 
+int _lua_log(lua_State * L) {
+    const char * arg_0 = lua_tostring(L, 1);
+    rabbit_log(arg_0);
+    return 0;
+}
+
 int _lua_sleep(lua_State * L) {
     unsigned int arg_0 = lua_tointeger(L, 1);
     rabbit_sleep(arg_0);
@@ -95,6 +101,7 @@ int _lua_get_window_rect(lua_State * L) {
 }
 
 luaL_Reg _rabbit_lua_methods[] = {
+    { "log", _lua_log },
     { "sleep", _lua_sleep },
     { "keypress", _lua_keypress },
     { "input", _lua_input },

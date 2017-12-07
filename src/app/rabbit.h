@@ -8,6 +8,7 @@ enum RABBIT_MODE
 {
 	RABBIT_MODE_LUA,
 	RABBIT_MODE_PYTHON,
+	RABBIT_MODE_JAVASCRIPT,
 };
 
 typedef struct {

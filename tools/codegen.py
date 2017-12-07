@@ -63,7 +63,7 @@ class PythonCodeGenerator(CodeGenerator):
         _code += '};\n'
         ret.append(_code)
 
-        _code = 'static PyObject * PyInit_rabbit(void) {\n'
+        _code = 'PyObject * PyInit_rabbit() {\n'
         _code += '    return PyModule_Create(&rabbit_python);\n'
         _code += '};\n'
         ret.append(_code)
@@ -180,10 +180,10 @@ class JavaScriptCodeGenerator(CodeGenerator):
         if _type == 'I':
             return 'uint32'
         if _type == 'd':
-            return 'number'
+            return 'double'
 
     def get_header_code(self):
-        return ['#include <node.h>', '#include "rabbit_core.h"\n', 'using namespace v8;\n']
+        return ['#include <v8.h>', '#include "rabbit_node.h"', '#include "rabbit_core.h"\n', 'using namespace v8;\n']
 
     def get_module_code(self, _module):
 
@@ -192,6 +192,15 @@ class JavaScriptCodeGenerator(CodeGenerator):
         _code = 'void _rabbit_javascript_init(Local<Object> exports) {\n'
         for _name, _, _ in _module:
             _code += ('    NODE_SET_METHOD(exports, "%s", _javascript_%s);\n' % (_name, _name))
+        _code += '};\n'
+        ret.append(_code)
+
+        _code = 'Local<Data> rabbit_javascript(Isolate* isolate) {\n'
+        _code += '    Local<ObjectTemplate> rabbit = ObjectTemplate::New(isolate);\n'
+        for _name, _, _ in _module:
+            _code += ('    rabbit->Set(String::NewFromUtf8(isolate, "%s"), '
+                      'FunctionTemplate::New(isolate, _javascript_%s));\n' % (_name, _name))
+        _code += '    return rabbit;\n'
         _code += '};\n'
         ret.append(_code)
 
@@ -205,14 +214,15 @@ class JavaScriptCodeGenerator(CodeGenerator):
             var_returns.append((self.to_type_cpp(_return),
                                 ('ret_%d' % _index),
                                 self.to_type_lua(_return),
-                                  _index))
+                                _index))
         for _argument, _index in zip(_arguments, itertools.count()):
             var_arguments.append((self.to_type_cpp(_argument),
                                   ('arg_%d' % _index),
                                   self.to_type_lua(_argument),
-                                  _index + 1))
+                                  _index))
 
         ret = ('void _javascript_%s(const FunctionCallbackInfo<Value>& args) {\n' % _name)
+        ret += '    Isolate* isolate = args.GetIsolate();\n'
 
         for var_return in var_returns:
             ret += ('    %s %s;\n' % var_return[0:2])
@@ -223,11 +233,11 @@ class JavaScriptCodeGenerator(CodeGenerator):
                 % (_name, ' ,'.join(['&' + x[1] for x in var_returns] + [x[1] for x in var_arguments])))
         if len(var_returns) == 1:
             for var_return in var_returns:
-                ret += ('    Value ret = _javascript_to_%s_value(%s);\n' % (var_return[2], var_return[1]))
+                ret += ('    Local<Value> ret = _javascript_to_%s_value(isolate, %s);\n' % (var_return[2], var_return[1]))
         if len(var_returns) > 1:
-            ret += ('    Handle<Array> ret = Array::New(%d);\n' % len(var_returns))
+            ret += ('    Handle<Array> ret = Array::New(isolate, %d);\n' % len(var_returns))
             for var_return in var_returns:
-                ret += ('    ret->Set(%d, _javascript_to_%s_value(%s));\n' % (var_return[3], var_return[2], var_return[1]))
+                ret += ('    ret->Set(%d, _javascript_to_%s_value(isolate, %s));\n' % (var_return[3], var_return[2], var_return[1]))
         if len(var_returns) > 0:
             ret += '    args.GetReturnValue().Set(ret);\n'
         ret += '}\n'
@@ -236,6 +246,7 @@ class JavaScriptCodeGenerator(CodeGenerator):
 
 
 module_conf = [
+    ('log', '', 's'),
     ('sleep', '', 'I'),
     ('keypress', '', 's'),
     ('input', '', 's'),

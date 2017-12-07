@@ -1,6 +1,13 @@
 #include <Python.h>
 #include "rabbit_core.h"
 
+PyObject * _python_log(PyObject * self, PyObject * args) {
+    const char * arg_0;
+    PyArg_ParseTuple(args, "s", &arg_0);
+    rabbit_log(arg_0);
+    return Py_BuildValue("");
+}
+
 PyObject * _python_sleep(PyObject * self, PyObject * args) {
     unsigned int arg_0;
     PyArg_ParseTuple(args, "I", &arg_0);
@@ -98,6 +105,7 @@ PyObject * _python_get_window_rect(PyObject * self, PyObject * args) {
 }
 
 PyMethodDef _rabbit_python_methods[] = {
+    { "log", _python_log, METH_VARARGS, NULL },
     { "sleep", _python_sleep, METH_VARARGS, NULL },
     { "keypress", _python_keypress, METH_VARARGS, NULL },
     { "input", _python_input, METH_VARARGS, NULL },

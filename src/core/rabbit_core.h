@@ -1,5 +1,6 @@
 #pragma once
 
+void rabbit_log(const char * text);
 void rabbit_sleep(unsigned int milliseconds);
 
 void rabbit_keypress(const char * key);

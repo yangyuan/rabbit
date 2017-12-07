@@ -341,3 +341,7 @@ void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, 
 	*ret_w = rect.right - rect.left;
 	*ret_h = rect.bottom - rect.top;
 }
+
+void rabbit_log(const char * text) {
+	printf("%s\n", text);
+}
