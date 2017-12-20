@@ -222,12 +222,13 @@ class JavaScriptCodeGenerator(CodeGenerator):
                                   _index))
 
         ret = ('void _javascript_%s(const FunctionCallbackInfo<Value>& args) {\n' % _name)
+        ret += '    RabbitCore * rabbit = new RabbitCore();\n'
         ret += '    Isolate* isolate = args.GetIsolate();\n'
 
         for var_return in var_returns:
             ret += ('    %s %s;\n' % var_return[0:2])
         for var_argument in var_arguments:
-            ret += ('    %s %s = _javascript_to_%s(args, %d);\n' % var_argument)
+            ret += ('    %s %s = _javascript_to_%s(rabbit, args, %d);\n' % var_argument)
 
         ret += ('    rabbit_%s(%s);\n'
                 % (_name, ' ,'.join(['&' + x[1] for x in var_returns] + [x[1] for x in var_arguments])))
@@ -240,6 +241,7 @@ class JavaScriptCodeGenerator(CodeGenerator):
                 ret += ('    ret->Set(%d, _javascript_to_%s_value(isolate, %s));\n' % (var_return[3], var_return[2], var_return[1]))
         if len(var_returns) > 0:
             ret += '    args.GetReturnValue().Set(ret);\n'
+        ret += '    delete rabbit;\n'
         ret += '}\n'
 
         return ret

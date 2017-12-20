@@ -1,7 +1,24 @@
 #include "common.h"
-#include "rabbit_core.h"
 #include <iostream>
 #include <string>
+#include "rabbit_core.h"
+
+RabbitCore::RabbitCore() {
+	// do nothing
+}
+RabbitCore::~RabbitCore() {
+	while (!this->callStack.empty())
+	{
+		free(this->callStack.top());
+		this->callStack.pop();
+	}
+	// do nothing
+}
+void * RabbitCore::allocate(size_t size) {
+	void * memory = malloc(size);
+	this->callStack.push(memory);
+	return memory;
+}
 
 using namespace std;
 
@@ -15,7 +32,7 @@ void rabbit_log(wstring text) {
 
 // directly input a string
 void rabbit_input(wstring text) {
-	int len = text.length();
+	int len = (int)text.length();
 	for (wchar_t& c : text) {
 		_rabbit_kayboard_wchar_press(c);
 		Sleep(10);
@@ -26,7 +43,7 @@ void rabbit_input(wstring text) {
 void rabbit_press(wstring key) {
 	char text[256];
 	ZeroMemory(text, 256 * sizeof(char));
-	WideCharToMultiByte(CP_UTF8, NULL, key.c_str(), key.length(), text, 255, NULL, NULL);
+	WideCharToMultiByte(CP_UTF8, NULL, key.c_str(), (int)key.length(), text, 255, NULL, NULL);
 	string _key(text);
 
 	WORD vkey = NULL;
@@ -90,7 +107,7 @@ void _rabbit_kayboard_vkey_press(WORD vkey) {
 
 
 void rabbit_input(const char * text) {
-	int len = strlen(text);
+	int len = (int)strlen(text);
 	wchar_t utext[256];
 	ZeroMemory(utext, 256 * sizeof(wchar_t));
 	MultiByteToWideChar(CP_UTF8, NULL, text, len, utext, 255);

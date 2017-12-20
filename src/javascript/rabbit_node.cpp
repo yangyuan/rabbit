@@ -14,7 +14,7 @@ Local<Value> _javascript_to_double_value(Isolate* isolate, double value) {
 Local<Value> _javascript_to_string_value(Isolate* isolate, char * value) {
 	return String::NewFromUtf8(isolate, value);
 }
-int _javascript_to_int32(FunctionCallbackInfo<Value> args, int index) {
+int _javascript_to_int32(RabbitCore * core, FunctionCallbackInfo<Value> args, int index) {
 	Isolate* isolate = args.GetIsolate();
 
 	if (args.Length() <= index) {
@@ -28,7 +28,7 @@ int _javascript_to_int32(FunctionCallbackInfo<Value> args, int index) {
 
 	isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong type of argument")));
 }
-unsigned int _javascript_to_uint32(FunctionCallbackInfo<Value> args, int index) {
+unsigned int _javascript_to_uint32(RabbitCore * core, FunctionCallbackInfo<Value> args, int index) {
 	Isolate* isolate = args.GetIsolate();
 
 	if (args.Length() <= index) {
@@ -42,7 +42,7 @@ unsigned int _javascript_to_uint32(FunctionCallbackInfo<Value> args, int index) 
 
 	isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong type of argument")));
 }
-double _javascript_to_double(FunctionCallbackInfo<Value> args, int index) {
+double _javascript_to_double(RabbitCore * core, FunctionCallbackInfo<Value> args, int index) {
 	Isolate* isolate = args.GetIsolate();
 
 	if (args.Length() <= index) {
@@ -56,7 +56,7 @@ double _javascript_to_double(FunctionCallbackInfo<Value> args, int index) {
 
 	isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong type of argument")));
 }
-char * _javascript_to_string(FunctionCallbackInfo<Value> args, int index) {
+char * _javascript_to_string(RabbitCore * core, FunctionCallbackInfo<Value> args, int index) {
 	Isolate* isolate = args.GetIsolate();
 
 	if (args.Length() <= index) {
@@ -68,7 +68,7 @@ char * _javascript_to_string(FunctionCallbackInfo<Value> args, int index) {
 		String::Utf8Value tmp(value);
 		std::string str(*tmp);
 		// TODO: change all char * to std::string to fix memleak
-		char * buff = (char *)malloc(tmp.length() * 2 + 2);
+		char * buff = (char *)core->allocate(tmp.length() * 2 + 2);
 		memcpy_s(buff, tmp.length() + 1, str.c_str(), tmp.length() + 1);
 
 		return buff;

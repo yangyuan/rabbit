@@ -1,5 +1,16 @@
 #pragma once
 
+#include <stack>
+
+class RabbitCore {
+public:
+	RabbitCore();
+	~RabbitCore();
+	void * allocate(size_t size);
+private:
+	std::stack<void *> callStack;
+};
+
 void rabbit_log(const char * text);
 void rabbit_sleep(unsigned int milliseconds);
 
@@ -15,7 +26,7 @@ bool rabbit_findcolor(int * ret_x, int * ret_y, unsigned int color, unsigned int
 
 
 bool rabbit_get_cursor_hash(unsigned int * ret_hash);
-// Press a key by name (UTF8) such as 'A', 'F1', 'жа'
+// Press a key by name (UTF8) such as 'A', 'F1'
 // Press a key by vkey code: http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731.aspx
 bool rabbit_keyboard_skey_press(const char * skey);
 bool rabbit_keyboard_skey_up(const char * skey);
@@ -37,8 +48,6 @@ bool rabbit_mouse_button_down(unsigned int button);
 bool rabbit_mouse_button_up(unsigned int button);
 bool rabbit_mouse_scroll(int offset);
 bool rabbit_mouse_fetch_cursor(unsigned int * ret_hash);
-
-bool rabbit_screen_search_color(int * ret_x, int * ret_y, unsigned int mode, unsigned int color, unsigned int x, unsigned int y, unsigned int w, unsigned int h, double tolerance);
 
 
 
