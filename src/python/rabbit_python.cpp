@@ -141,6 +141,6 @@ static struct PyModuleDef rabbit_python = {
     _rabbit_python_methods, NULL, NULL, NULL, NULL
 };
 
-PyObject * PyInit_rabbit() {
+PyMODINIT_FUNC PyInit_rabbit() {
     return PyModule_Create(&rabbit_python);
 };

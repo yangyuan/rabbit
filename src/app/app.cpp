@@ -42,7 +42,7 @@ bool load_script(LPCTSTR path, LPSTR &buffer, DWORD &length)
 }
 
 void rabbit_init_lua(lua_State * L);
-extern PyObject * PyInit_rabbit();
+PyMODINIT_FUNC PyInit_rabbit();
 v8::Local<v8::Data> rabbit_javascript(v8::Isolate* isolate);
 
 static v8::Isolate * isolate = NULL;

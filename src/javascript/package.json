@@ -1,0 +1,15 @@
+{
+  "name": "rabbit-bot",
+  "version": "0.0.3",
+  "author": "Yuan Yang",
+  "description": "Windows Bot Engine (Human Input Simulator)",
+  "homepage": "https://github.com/yangyuan/rabbit",
+  "main": "index.js",
+  "scripts": {
+    "install": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yangyuan/rabbit"
+  }
+}

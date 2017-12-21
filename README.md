@@ -25,4 +25,7 @@ F7/F8 will start/end the script.
 The application will search script.py/script.js/script.lua in order, only one script will run.
 
 ### Rabbit-Bot Packages
-(Not Available Yet)
+#### PyPI
+`pip install rabbit-bot`
+#### NPM
+`npm install rabbit-bot`
