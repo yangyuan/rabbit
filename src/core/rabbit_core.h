@@ -11,16 +11,22 @@ private:
 	std::stack<void *> callStack;
 };
 
-void rabbit_log(const char * text);
-void rabbit_sleep(unsigned int milliseconds);
+class Rabbit : public RabbitCore {
+public:
+	void log(const char * text);
+	void sleep(unsigned int milliseconds);
+	void press(const char * key);
+	void input(const char * text);
+	void moveto(unsigned int x, unsigned int y);
+	void click();
+	void doubleclick();
+	void rightclick();
+	bool findcolor(int * ret_x, int * ret_y, unsigned int color, unsigned int x, unsigned int y, unsigned int w, unsigned int h, double tolerance);
+	void findwindow(long long * window, const char * window_name, const char * class_name);
 
-void rabbit_keypress(const char * key);
-void rabbit_input(const char * text);
-void rabbit_moveto(unsigned int x, unsigned int y);
-void rabbit_click();
-void rabbit_doubleclick();
-void rabbit_rightclick();
-bool rabbit_findcolor(int * ret_x, int * ret_y, unsigned int color, unsigned int x, unsigned int y, unsigned int w, unsigned int h, double tolerance);
+	void window_get_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, long long window);
+	bool mouse_get_cursor(unsigned int * ret_hash);
+};
 
 
 
@@ -47,10 +53,5 @@ bool rabbit_mouse_button_click(unsigned int button);
 bool rabbit_mouse_button_down(unsigned int button);
 bool rabbit_mouse_button_up(unsigned int button);
 bool rabbit_mouse_scroll(int offset);
-bool rabbit_mouse_fetch_cursor(unsigned int * ret_hash);
 
 
-
-void rabbit_findwindow(unsigned int * window, const char * window_name);
-void rabbit_find_window(unsigned int * window, const char * window_name, const char * class_name);
-void rabbit_get_window_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h, unsigned int window);

@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\core\rabbit_core.cpp" />
+    <ClCompile Include="..\core\rabbit_utils.cpp" />
     <ClCompile Include="..\javascript\rabbit_javascript.cpp" />
     <ClCompile Include="..\javascript\rabbit_node.cpp" />
     <ClCompile Include="..\lua\rabbit_lua.cpp" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="..\core\common.h" />
     <ClInclude Include="..\core\rabbit_core.h" />
+    <ClInclude Include="..\core\rabbit_utils.h" />
     <ClInclude Include="..\javascript\rabbit_node.h" />
     <ClInclude Include="rabbit.h" />
   </ItemGroup>

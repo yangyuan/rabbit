@@ -13,6 +13,8 @@ class CodeGenerator:
             return 'int'
         if _type == 'I':
             return 'unsigned int'
+        if _type == 'L':
+            return 'long long'
         if _type == 'd':
             return 'double'
 
@@ -80,6 +82,7 @@ class PythonCodeGenerator(CodeGenerator):
             var_arguments.append((self.to_type_cpp(_argument), ('arg_%d' % _index)))
 
         ret = ('PyObject * _python_%s(PyObject * self, PyObject * args) {\n' % _name)
+        ret += '    Rabbit * rabbit = new Rabbit();\n'
 
         for var_return in var_returns:
             ret += ('    %s %s;\n' % var_return)
@@ -88,8 +91,9 @@ class PythonCodeGenerator(CodeGenerator):
 
         ret += ('    PyArg_ParseTuple(args, "%s"%s);\n'
                 % (''.join(_arguments), ''.join([', &' + x[1] for x in var_arguments])))
-        ret += ('    rabbit_%s(%s);\n'
+        ret += ('    rabbit->%s(%s);\n'
                 % (_name, ' ,'.join(['&' + x[1] for x in var_returns] + [x[1] for x in var_arguments])))
+        ret += '    delete rabbit;\n'
         ret += ('    return Py_BuildValue("%s"%s);\n'
                 % (''.join(_returns), ''.join([', ' + x[1] for x in var_returns])))
 
@@ -107,7 +111,7 @@ class LuaCodeGenerator(CodeGenerator):
     def to_type_lua(_type):
         if _type == 's':
             return 'string'
-        if _type == 'i' or _type == 'I':
+        if _type == 'i' or _type == 'I' or _type == 'L':
             return 'integer'
         if _type == 'd':
             return 'number'
@@ -149,16 +153,18 @@ class LuaCodeGenerator(CodeGenerator):
                                   _index + 1))
 
         ret = ('int _lua_%s(lua_State * L) {\n' % _name)
+        ret += '    Rabbit * rabbit = new Rabbit();\n'
 
         for var_return in var_returns:
             ret += ('    %s %s;\n' % var_return[0:2])
         for var_argument in var_arguments:
             ret += ('    %s %s = lua_to%s(L, %d);\n' % var_argument)
 
-        ret += ('    rabbit_%s(%s);\n'
+        ret += ('    rabbit->%s(%s);\n'
                 % (_name, ' ,'.join(['&' + x[1] for x in var_returns] + [x[1] for x in var_arguments])))
         for var_return in var_returns:
             ret += ('    lua_push%s(L, %s);\n' % (var_return[2], var_return[1]))
+        ret += '    delete rabbit;\n'
         ret += ('    return %d;\n' % len(_returns))
 
         ret += '}\n'
@@ -179,6 +185,8 @@ class JavaScriptCodeGenerator(CodeGenerator):
             return 'int32'
         if _type == 'I':
             return 'uint32'
+        if _type == 'L':
+            return 'int64'
         if _type == 'd':
             return 'double'
 
@@ -222,7 +230,7 @@ class JavaScriptCodeGenerator(CodeGenerator):
                                   _index))
 
         ret = ('void _javascript_%s(const FunctionCallbackInfo<Value>& args) {\n' % _name)
-        ret += '    RabbitCore * rabbit = new RabbitCore();\n'
+        ret += '    Rabbit * rabbit = new Rabbit();\n'
         ret += '    Isolate* isolate = args.GetIsolate();\n'
 
         for var_return in var_returns:
@@ -230,7 +238,7 @@ class JavaScriptCodeGenerator(CodeGenerator):
         for var_argument in var_arguments:
             ret += ('    %s %s = _javascript_to_%s(rabbit, args, %d);\n' % var_argument)
 
-        ret += ('    rabbit_%s(%s);\n'
+        ret += ('    rabbit->%s(%s);\n'
                 % (_name, ' ,'.join(['&' + x[1] for x in var_returns] + [x[1] for x in var_arguments])))
         if len(var_returns) == 1:
             for var_return in var_returns:
@@ -250,17 +258,16 @@ class JavaScriptCodeGenerator(CodeGenerator):
 module_conf = [
     ('log', '', 's'),
     ('sleep', '', 'I'),
-    ('keypress', '', 's'),
+    ('press', '', 's'),
     ('input', '', 's'),
     ('moveto', '', 'II'),
     ('click', '', ''),
     ('doubleclick', '', ''),
     ('rightclick', '', ''),
     ('findcolor', 'ii', 'IIIIId'),
-    ('mouse_fetch_cursor', 'I', ''),
-    ('findwindow', 'I', 's'),
-    ('find_window', 'I', 'ss'),
-    ('get_window_rect', 'iiii', 'I')
+    ('findwindow', 'L', 'ss'),
+    ('mouse_get_cursor', 'I', ''),
+    ('window_get_rect', 'iiii', 'L')
 ]
 
 

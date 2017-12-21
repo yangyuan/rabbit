@@ -8,6 +8,9 @@ Local<Value> _javascript_to_int32_value(Isolate* isolate, int value) {
 Local<Value> _javascript_to_uint32_value(Isolate* isolate, unsigned int value) {
 	return Uint32::New(isolate, value);
 }
+Local<Value> _javascript_to_int64_value(Isolate* isolate, long long value) {
+	return _javascript_to_int32_value(isolate, (int)value);
+}
 Local<Value> _javascript_to_double_value(Isolate* isolate, double value) {
 	return Number::New(isolate, value);
 }
@@ -41,6 +44,9 @@ unsigned int _javascript_to_uint32(RabbitCore * core, FunctionCallbackInfo<Value
 	}
 
 	isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong type of argument")));
+}
+long long _javascript_to_int64(RabbitCore * core, FunctionCallbackInfo<Value> args, int index) {
+	return (long long)_javascript_to_int32(core, args, index);
 }
 double _javascript_to_double(RabbitCore * core, FunctionCallbackInfo<Value> args, int index) {
 	Isolate* isolate = args.GetIsolate();
