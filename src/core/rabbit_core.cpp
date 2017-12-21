@@ -1,12 +1,11 @@
-#include "common.h"
-#include <iostream>
-#include <string>
+#include "rabbit_core_common.h"
 #include "rabbit_core.h"
-#include "rabbit_utils.h"
+#include "rabbit_core_utils.h"
 
 RabbitCore::RabbitCore() {
 	// do nothing
 }
+
 RabbitCore::~RabbitCore() {
 	while (!this->callStack.empty())
 	{
@@ -28,10 +27,6 @@ void Rabbit::log(const char * text) {
 void Rabbit::sleep(unsigned int milliseconds) {
 	Sleep((DWORD) milliseconds);
 }
-
-
-
-
 
 void Rabbit::press(const char * key) {
 	std::string keyName(key);
@@ -120,6 +115,10 @@ bool Rabbit::findcolor(int * ret_x, int * ret_y,
 }
 
 void Rabbit::findwindow(long long * window, const char * window_name, const char * class_name) {
+	if (strlen(class_name) == 0) {
+		class_name = NULL;
+	}
+
 	*window = (long long)FindWindowA(class_name, window_name);
 }
 
@@ -135,4 +134,3 @@ void Rabbit::window_get_rect(int * ret_x, int * ret_y, int * ret_w, int * ret_h,
 bool Rabbit::mouse_get_cursor(unsigned int * ret_hash) {
 	return _rabbit_mouse_get_cursor(ret_hash);
 }
-

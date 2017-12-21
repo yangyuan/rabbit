@@ -1,9 +1,8 @@
-#include "rabbit.h"
+#include "app.h"
 #include <v8.h>
 #include <libplatform/libplatform.h>
 #include <Python.h>
 #include <lua.hpp>
-
 
 bool load_script(LPCTSTR path, LPSTR &buffer, DWORD &length)
 {

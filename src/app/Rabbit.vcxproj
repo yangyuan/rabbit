@@ -26,20 +26,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\core\rabbit_core.cpp" />
-    <ClCompile Include="..\core\rabbit_utils.cpp" />
+    <ClCompile Include="..\core\rabbit_core_utils.cpp" />
     <ClCompile Include="..\javascript\rabbit_javascript.cpp" />
-    <ClCompile Include="..\javascript\rabbit_node.cpp" />
+    <ClCompile Include="..\javascript\rabbit_javascript_utils.cpp" />
     <ClCompile Include="..\lua\rabbit_lua.cpp" />
     <ClCompile Include="..\python\rabbit_python.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rabbit.cpp" />
+    <ClCompile Include="app.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\core\common.h" />
+    <ClInclude Include="..\core\rabbit_core_common.h" />
     <ClInclude Include="..\core\rabbit_core.h" />
-    <ClInclude Include="..\core\rabbit_utils.h" />
-    <ClInclude Include="..\javascript\rabbit_node.h" />
-    <ClInclude Include="rabbit.h" />
+    <ClInclude Include="..\core\rabbit_core_utils.h" />
+    <ClInclude Include="..\javascript\rabbit_javascript_utils.h" />
+    <ClInclude Include="app.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

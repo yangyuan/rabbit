@@ -19,4 +19,3 @@ typedef struct {
 
 void rabbit_file(RABBIT_MODE mode, LPCTSTR path);
 void rabbit_string(RABBIT_MODE mode, char * script);
-void rabbit_debug();

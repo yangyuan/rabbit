@@ -1,4 +1,4 @@
-#include "rabbit.h"
+#include "app.h"
 
 DWORD WINAPI ThreadProc(LPVOID lpParameter) {
 	RABBIT_PROC proc = *(RABBIT_PROC *)lpParameter; // copy value, original pionter might be dis

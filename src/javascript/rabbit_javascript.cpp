@@ -1,6 +1,6 @@
 #include <v8.h>
-#include "rabbit_node.h"
 #include "rabbit_core.h"
+#include "rabbit_javascript_utils.h"
 
 using namespace v8;
 
