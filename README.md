@@ -4,6 +4,7 @@ Rabbit
 
 ## News
 
+- Rabbit 0.0. (Dec 20, 2017)
 - Rabbit re-write. (Dec 5, 2017)
 - Add DPI support.(Sep 18, 2016)
 - Add full keyboard support. (May 2, 2015)
@@ -16,16 +17,24 @@ Rabbit is designed to use programs to simulate human inputs. Which might be usef
 This project contains two sub-projects:
 
  - Rabbit App: An application with embedded scripting support, an alternative of QuickMacro.
- - Rabbit-Bot Packages: Packages for Python (PyPI), JavaScript (NPM), Lua (LuaRocks).
+ - Rabbit-Bot Packages: Packages for Python (PyPI), JavaScript (NPM).
 
 ## Usage
 
 ### Rabbit App
 F7/F8 will start/end the script.
-The application will search script.py/script.js/script.lua in order, only one script will run.
+The application will search script.py/script.js/script.lua in order, but only one script will run.
 
 ### Rabbit-Bot Packages
+
 #### PyPI
+
+https://pypi.python.org/pypi/rabbit-bot/
+
 `pip install rabbit-bot`
+
 #### NPM
+
+https://www.npmjs.com/package/rabbit-bot
+
 `npm install rabbit-bot`
