@@ -118,31 +118,40 @@ bool _rabbit_mouse_get_cursor(unsigned int * id, unsigned int * hash) {
 
 	*id = info.wResID;
 
-	HBITMAP hBITMAPcopy;
+	HBITMAP hBITMAPcopyColor;
 	BITMAP BM_32_bit_color;
-	hBITMAPcopy = (HBITMAP)CopyImage(info.hbmColor, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-	GetObject(hBITMAPcopy, sizeof(BITMAP), &BM_32_bit_color);
+	hBITMAPcopyColor = (HBITMAP)CopyImage(info.hbmColor, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+	GetObject(hBITMAPcopyColor, sizeof(BITMAP), &BM_32_bit_color);
+	HBITMAP hBITMAPcopyMask;
 	BITMAP BM_1_bit_mask;
-	hBITMAPcopy = (HBITMAP)CopyImage(info.hbmMask, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-	GetObject(hBITMAPcopy, sizeof(BITMAP), &BM_1_bit_mask);
+	hBITMAPcopyMask = (HBITMAP)CopyImage(info.hbmMask, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+	GetObject(hBITMAPcopyMask, sizeof(BITMAP), &BM_1_bit_mask);
 
-	int len_cache = BM_32_bit_color.bmWidth *BM_32_bit_color.bmHeight * (BM_32_bit_color.bmBitsPixel / 8);
 
 	// use crc32 to get hash
 	unsigned int _hash = 0xFFFFFFFF;
-	BYTE * tmp = (BYTE *)BM_32_bit_color.bmBits;
-	for (unsigned int i = 0; i<len_cache; i++)
-	{
-		_hash = UPDC32(*tmp, _hash);
-		tmp++;
+
+	if (hBITMAPcopyColor != NULL && hBITMAPcopyMask != NULL) {
+		int len_cache = BM_32_bit_color.bmWidth *BM_32_bit_color.bmHeight * (BM_32_bit_color.bmBitsPixel / 8);
+		BYTE * tmp = (BYTE *)BM_32_bit_color.bmBits;
+		for (unsigned int i = 0; i < len_cache; i++)
+		{
+			_hash = UPDC32(*tmp, _hash);
+			tmp++;
+		}
+		len_cache = BM_1_bit_mask.bmWidth *BM_1_bit_mask.bmHeight;
+		tmp = (BYTE *)BM_1_bit_mask.bmBits;
+		for (unsigned int i = 0; i < len_cache; i++)
+		{
+			_hash = UPDC32(*tmp, _hash);
+			tmp++;
+		}
 	}
-	len_cache = BM_1_bit_mask.bmWidth *BM_1_bit_mask.bmHeight;
-	tmp = (BYTE *)BM_1_bit_mask.bmBits;
-	for (unsigned int i = 0; i<len_cache; i++)
-	{
-		_hash = UPDC32(*tmp, _hash);
-		tmp++;
-	}
+
+	DeleteObject(info.hbmColor);
+	DeleteObject(info.hbmMask);
+	DeleteObject(hBITMAPcopyMask);
+	DeleteObject(hBITMAPcopyColor);
 
 	_hash = ~_hash; // | 0x80000000;
 	*hash = _hash;
