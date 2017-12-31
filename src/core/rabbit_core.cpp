@@ -14,6 +14,7 @@ RabbitCore::~RabbitCore() {
 	}
 	// do nothing
 }
+
 void * RabbitCore::allocate(size_t size) {
 	void * memory = malloc(size);
 	this->callStack.push(memory);
@@ -42,7 +43,7 @@ void Rabbit::press(const char * key) {
 	}
 
 	if (vkey != NULL) {
-		_rabbit_kayboard_vkey_press(vkey);
+		rabbit_kayboard_vkey_press(vkey);
 	}
 }
 
@@ -55,7 +56,7 @@ void Rabbit::input(const char * text) {
 	MultiByteToWideChar(CP_UTF8, NULL, text, len, utext, wlen);
 
 	for (int i = 0; i < wlen; i++) {
-		_rabbit_kayboard_wchar_press(utext[i]);
+		rabbit_kayboard_wchar_press(utext[i]);
 	}
 }
 
@@ -111,7 +112,7 @@ void Rabbit::findcolor(int * ret_x, int * ret_y,
 	unsigned int color,
 	unsigned int x, unsigned int y, unsigned int w, unsigned int h,
 	double tolerance) {
-	screen_search_color(ret_x, ret_y, 0, color, x, y, w, h, tolerance);
+	rabbit_screen_search_color(ret_x, ret_y, 0, color, x, y, w, h, tolerance);
 }
 
 void Rabbit::findwindow(long long * window, const char * window_name, const char * class_name) {
@@ -137,7 +138,7 @@ void Rabbit::window_find_focus(long long * window) {
 
 void Rabbit::mouse_get_cursor(unsigned int * cursor) {
 	unsigned int _id, _hash;
-	_rabbit_mouse_get_cursor(&_id, &_hash);
+	rabbit_mouse_get_cursor(&_id, &_hash);
 
 	if (_id != 0) {
 		*cursor = _id;
@@ -149,14 +150,18 @@ void Rabbit::mouse_get_cursor(unsigned int * cursor) {
 
 void Rabbit::mouse_get_cursor_id(unsigned int * id) {
 	unsigned int _hash;
-	_rabbit_mouse_get_cursor(id, &_hash);
+	rabbit_mouse_get_cursor(id, &_hash);
 }
 
 void Rabbit::mouse_get_cursor_hash(unsigned int * hash) {
 	unsigned int _id;
-	_rabbit_mouse_get_cursor(&_id, hash);
+	rabbit_mouse_get_cursor(&_id, hash);
 }
 
 void Rabbit::keyboard_press_vkey(unsigned int vkey) {
-	_rabbit_kayboard_vkey_press(vkey);
+	rabbit_kayboard_vkey_press(vkey);
+}
+
+void Rabbit::system_hotkey(int id, unsigned int vkey, unsigned int modifiers) {
+	rabbit_system_hotkey(id, vkey, modifiers);
 }

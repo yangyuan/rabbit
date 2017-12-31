@@ -163,6 +163,16 @@ void _javascript_window_find_focus(const FunctionCallbackInfo<Value>& args) {
     delete rabbit;
 }
 
+void _javascript_system_hotkey(const FunctionCallbackInfo<Value>& args) {
+    Rabbit * rabbit = new Rabbit();
+    Isolate* isolate = args.GetIsolate();
+    int arg_0 = _javascript_to_int32(rabbit, args, 0);
+    unsigned int arg_1 = _javascript_to_uint32(rabbit, args, 1);
+    unsigned int arg_2 = _javascript_to_uint32(rabbit, args, 2);
+    rabbit->system_hotkey(arg_0 ,arg_1 ,arg_2);
+    delete rabbit;
+}
+
 void _rabbit_javascript_init(Local<Object> exports) {
     NODE_SET_METHOD(exports, "log", _javascript_log);
     NODE_SET_METHOD(exports, "sleep", _javascript_sleep);
@@ -180,6 +190,7 @@ void _rabbit_javascript_init(Local<Object> exports) {
     NODE_SET_METHOD(exports, "keyboard_press_vkey", _javascript_keyboard_press_vkey);
     NODE_SET_METHOD(exports, "window_get_rect", _javascript_window_get_rect);
     NODE_SET_METHOD(exports, "window_find_focus", _javascript_window_find_focus);
+    NODE_SET_METHOD(exports, "system_hotkey", _javascript_system_hotkey);
 };
 
 Local<Data> rabbit_javascript(Isolate* isolate) {
@@ -200,5 +211,6 @@ Local<Data> rabbit_javascript(Isolate* isolate) {
     rabbit->Set(String::NewFromUtf8(isolate, "keyboard_press_vkey"), FunctionTemplate::New(isolate, _javascript_keyboard_press_vkey));
     rabbit->Set(String::NewFromUtf8(isolate, "window_get_rect"), FunctionTemplate::New(isolate, _javascript_window_get_rect));
     rabbit->Set(String::NewFromUtf8(isolate, "window_find_focus"), FunctionTemplate::New(isolate, _javascript_window_find_focus));
+    rabbit->Set(String::NewFromUtf8(isolate, "system_hotkey"), FunctionTemplate::New(isolate, _javascript_system_hotkey));
     return rabbit;
 };

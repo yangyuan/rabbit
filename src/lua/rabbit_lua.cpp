@@ -151,6 +151,16 @@ int _lua_window_find_focus(lua_State * L) {
     return 1;
 }
 
+int _lua_system_hotkey(lua_State * L) {
+    Rabbit * rabbit = new Rabbit();
+    int arg_0 = lua_tointeger(L, 1);
+    unsigned int arg_1 = lua_tointeger(L, 2);
+    unsigned int arg_2 = lua_tointeger(L, 3);
+    rabbit->system_hotkey(arg_0 ,arg_1 ,arg_2);
+    delete rabbit;
+    return 0;
+}
+
 luaL_Reg _rabbit_lua_methods[] = {
     { "log", _lua_log },
     { "sleep", _lua_sleep },
@@ -168,6 +178,7 @@ luaL_Reg _rabbit_lua_methods[] = {
     { "keyboard_press_vkey", _lua_keyboard_press_vkey },
     { "window_get_rect", _lua_window_get_rect },
     { "window_find_focus", _lua_window_find_focus },
+    { "system_hotkey", _lua_system_hotkey },
     { NULL, NULL }
 };
 

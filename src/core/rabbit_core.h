@@ -31,6 +31,8 @@ public:
 	void mouse_get_cursor_hash(unsigned int * hash);
 
 	void keyboard_press_vkey(unsigned int vkey);
+
+	void system_hotkey(int id, unsigned int vkey, unsigned int modifiers);
 	/*
 	void mouse_moveto(unsigned int x, unsigned int y);
 	void mouse_move(int cx, int cy);

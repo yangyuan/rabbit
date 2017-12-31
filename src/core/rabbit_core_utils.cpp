@@ -47,9 +47,7 @@ static unsigned int crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
 };
 #define UPDC32(octet,crc) (crc_32_tab[((crc) ^ ((BYTE)octet)) & 0xff] ^ ((crc) >> 8))
 
-
-
-void _rabbit_kayboard_wchar_press(wchar_t keychar) {
+void rabbit_kayboard_wchar_press(wchar_t keychar) {
 	INPUT input[2];
 	ZeroMemory(input, 2 * sizeof(INPUT));
 
@@ -66,7 +64,7 @@ void _rabbit_kayboard_wchar_press(wchar_t keychar) {
 	SendInput(2, input, sizeof(INPUT));
 }
 
-void _rabbit_kayboard_vkey_press(UINT vkey) {
+void rabbit_kayboard_vkey_press(UINT vkey) {
 	INPUT input[2];
 	ZeroMemory(input, 2 * sizeof(INPUT));
 
@@ -85,20 +83,18 @@ void _rabbit_kayboard_vkey_press(UINT vkey) {
 	SendInput(1, input + 1, sizeof(INPUT));
 }
 
-void _rabbit_kayboard_vkey_press_2(UINT vkey) {
+void rabbit_kayboard_skey_press(WORD skey) {
 	INPUT input[2];
 	ZeroMemory(input, 2 * sizeof(INPUT));
 
-	const UINT vKey = MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
-
 	input[0].type = INPUT_KEYBOARD;
 	input[0].ki.wVk = 0;
-	input[0].ki.wScan = vKey;
+	input[0].ki.wScan = skey;
 	input[0].ki.dwFlags = KEYEVENTF_SCANCODE;
 
 	input[1].type = INPUT_KEYBOARD;
 	input[1].ki.wVk = 0;
-	input[1].ki.wScan = vKey;
+	input[1].ki.wScan = skey;
 	input[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
 
 	SendInput(1, input, sizeof(INPUT));
@@ -106,7 +102,7 @@ void _rabbit_kayboard_vkey_press_2(UINT vkey) {
 	SendInput(1, input + 1, sizeof(INPUT));
 }
 
-bool _rabbit_mouse_get_cursor(unsigned int * id, unsigned int * hash) {
+bool rabbit_mouse_get_cursor(unsigned int * id, unsigned int * hash) {
 
 	CURSORINFO ci;
 	ci.cbSize = sizeof(ci);
@@ -186,13 +182,12 @@ inline bool checkcolor(unsigned int color, BYTE * buff, double tolerance, int x,
 	}
 
 	if (dis <= tolerance) {
-		printf("%d %lf\n", dis, tolerance);
 		return true;
 	}
 	return false;
 }
 
-bool screen_search_color(int * ret_x, int * ret_y,
+bool rabbit_screen_search_color(int * ret_x, int * ret_y,
 	unsigned int mode, unsigned int color,
 	unsigned int x, unsigned int y, unsigned int w, unsigned int h,
 	double tolerance) {
@@ -268,4 +263,66 @@ bool screen_search_color(int * ret_x, int * ret_y,
 
 	HeapFree(hheap, NULL, cache);
 	return true;
+}
+
+struct HotKeyInfo
+{
+	bool ready;
+	int id;
+	UINT modifiers;
+	UINT vkey;
+};
+
+DWORD WINAPI HotkeyThreadProc(LPVOID lpParameter)
+{
+	HotKeyInfo * hki = (HotKeyInfo *)lpParameter;
+	RegisterHotKey(NULL, hki->id, hki->modifiers, hki->vkey);
+
+	if (hki->id == 0) {
+		hki->ready = true;
+	}
+
+	MSG msg = { 0 };
+	while (GetMessage(&msg, NULL, 0, 0) != 0)
+	{
+		switch (msg.message) {
+		case WM_HOTKEY:
+			if (msg.message == WM_HOTKEY)
+			{
+				if (msg.wParam == 0) {
+					Beep(400, 125);
+					Beep(700, 125);
+					exit(0);
+				}
+				else if (msg.wParam == 1) {
+					Beep(700, 125);
+					Beep(400, 125);
+					hki->ready = true;
+				}
+			}
+		}
+	}
+}
+
+void rabbit_system_hotkey(int id, UINT vkey, UINT modifiers) {
+	DWORD threadId;
+	HANDLE thread;
+
+	HotKeyInfo * hki = new HotKeyInfo();
+	hki->ready = false;
+	hki->id = id;
+	hki->modifiers = modifiers;
+	hki->vkey = vkey;
+
+	thread = CreateThread(NULL, 0, HotkeyThreadProc, hki, 0, &threadId);
+
+	while (true)
+	{
+		if (hki->ready) {
+			delete hki;
+			return;
+		}
+
+		Sleep(128);
+	}
 }

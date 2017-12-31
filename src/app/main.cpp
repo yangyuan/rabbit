@@ -43,8 +43,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	BOOL ret;
 	HANDLE ThreadHandle = NULL;
 
-	ret = RegisterHotKey(NULL, 0, NULL, VK_F7);
-	ret = RegisterHotKey(NULL, 1, NULL, VK_F8);
+	ret = RegisterHotKey(NULL, 0, NULL, VK_F8);
+	ret = RegisterHotKey(NULL, 1, NULL, VK_F7);
 
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE);
 
@@ -58,7 +58,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		switch (msg.message) {
 		case WM_HOTKEY:
-			if (msg.wParam == 0) {
+			if (msg.wParam == 1) {
 				printf("F7\n");
 				Beep(400, 125);
 				Beep(700, 125);
@@ -82,7 +82,7 @@ int _tmain(int argc, _TCHAR* argv[])
 					ThreadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&ThreadProc, (LPVOID)&proc, 0, &dwThreadId);
 				}
 			}
-			else if (msg.wParam == 1) {
+			else if (msg.wParam == 0) {
 				printf("F8\n");
 				Beep(700, 125);
 				Beep(400, 125);

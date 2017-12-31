@@ -156,6 +156,17 @@ PyObject * _python_window_find_focus(PyObject * self, PyObject * args) {
     return Py_BuildValue("L", ret_0);
 }
 
+PyObject * _python_system_hotkey(PyObject * self, PyObject * args) {
+    Rabbit * rabbit = new Rabbit();
+    int arg_0;
+    unsigned int arg_1;
+    unsigned int arg_2;
+    PyArg_ParseTuple(args, "iII", &arg_0, &arg_1, &arg_2);
+    rabbit->system_hotkey(arg_0 ,arg_1 ,arg_2);
+    delete rabbit;
+    return Py_BuildValue("");
+}
+
 PyMethodDef _rabbit_python_methods[] = {
     { "log", _python_log, METH_VARARGS, NULL },
     { "sleep", _python_sleep, METH_VARARGS, NULL },
@@ -173,6 +184,7 @@ PyMethodDef _rabbit_python_methods[] = {
     { "keyboard_press_vkey", _python_keyboard_press_vkey, METH_VARARGS, NULL },
     { "window_get_rect", _python_window_get_rect, METH_VARARGS, NULL },
     { "window_find_focus", _python_window_find_focus, METH_VARARGS, NULL },
+    { "system_hotkey", _python_system_hotkey, METH_VARARGS, NULL },
     { NULL, NULL, 0, NULL }
 };
 

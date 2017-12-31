@@ -272,7 +272,8 @@ module_conf = [
     ('mouse_get_cursor_hash', 'I', ''),
     ('keyboard_press_vkey', '', 'I'),
     ('window_get_rect', 'iiii', 'L'),
-    ('window_find_focus', 'L', '')
+    ('window_find_focus', 'L', ''),
+    ('system_hotkey', '', 'iII')
 ]
 
 
