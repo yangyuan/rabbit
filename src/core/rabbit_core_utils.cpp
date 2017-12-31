@@ -290,13 +290,13 @@ DWORD WINAPI HotkeyThreadProc(LPVOID lpParameter)
 			if (msg.message == WM_HOTKEY)
 			{
 				if (msg.wParam == 0) {
-					Beep(400, 125);
 					Beep(700, 125);
+					Beep(400, 125);
 					exit(0);
 				}
 				else if (msg.wParam == 1) {
-					Beep(700, 125);
 					Beep(400, 125);
+					Beep(700, 125);
 					hki->ready = true;
 				}
 			}
