@@ -49,6 +49,14 @@ int _lua_click(lua_State * L) {
     return 0;
 }
 
+int _lua_scroll(lua_State * L) {
+    Rabbit * rabbit = new Rabbit();
+    double arg_0 = lua_tonumber(L, 1);
+    rabbit->scroll(arg_0);
+    delete rabbit;
+    return 0;
+}
+
 int _lua_doubleclick(lua_State * L) {
     Rabbit * rabbit = new Rabbit();
     rabbit->doubleclick();
@@ -168,6 +176,7 @@ luaL_Reg _rabbit_lua_methods[] = {
     { "input", _lua_input },
     { "moveto", _lua_moveto },
     { "click", _lua_click },
+    { "scroll", _lua_scroll },
     { "doubleclick", _lua_doubleclick },
     { "rightclick", _lua_rightclick },
     { "findcolor", _lua_findcolor },

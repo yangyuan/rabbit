@@ -263,6 +263,7 @@ module_conf = [
     ('input', '', 's'),
     ('moveto', '', 'II'),
     ('click', '', ''),
+    ('scroll', '', 'd'),
     ('doubleclick', '', ''),
     ('rightclick', '', ''),
     ('findcolor', 'ii', 'IIIIId'),

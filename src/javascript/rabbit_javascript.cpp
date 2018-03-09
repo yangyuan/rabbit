@@ -52,6 +52,14 @@ void _javascript_click(const FunctionCallbackInfo<Value>& args) {
     delete rabbit;
 }
 
+void _javascript_scroll(const FunctionCallbackInfo<Value>& args) {
+    Rabbit * rabbit = new Rabbit();
+    Isolate* isolate = args.GetIsolate();
+    double arg_0 = _javascript_to_double(rabbit, args, 0);
+    rabbit->scroll(arg_0);
+    delete rabbit;
+}
+
 void _javascript_doubleclick(const FunctionCallbackInfo<Value>& args) {
     Rabbit * rabbit = new Rabbit();
     Isolate* isolate = args.GetIsolate();
@@ -180,6 +188,7 @@ void _rabbit_javascript_init(Local<Object> exports) {
     NODE_SET_METHOD(exports, "input", _javascript_input);
     NODE_SET_METHOD(exports, "moveto", _javascript_moveto);
     NODE_SET_METHOD(exports, "click", _javascript_click);
+    NODE_SET_METHOD(exports, "scroll", _javascript_scroll);
     NODE_SET_METHOD(exports, "doubleclick", _javascript_doubleclick);
     NODE_SET_METHOD(exports, "rightclick", _javascript_rightclick);
     NODE_SET_METHOD(exports, "findcolor", _javascript_findcolor);
@@ -201,6 +210,7 @@ Local<Data> rabbit_javascript(Isolate* isolate) {
     rabbit->Set(String::NewFromUtf8(isolate, "input"), FunctionTemplate::New(isolate, _javascript_input));
     rabbit->Set(String::NewFromUtf8(isolate, "moveto"), FunctionTemplate::New(isolate, _javascript_moveto));
     rabbit->Set(String::NewFromUtf8(isolate, "click"), FunctionTemplate::New(isolate, _javascript_click));
+    rabbit->Set(String::NewFromUtf8(isolate, "scroll"), FunctionTemplate::New(isolate, _javascript_scroll));
     rabbit->Set(String::NewFromUtf8(isolate, "doubleclick"), FunctionTemplate::New(isolate, _javascript_doubleclick));
     rabbit->Set(String::NewFromUtf8(isolate, "rightclick"), FunctionTemplate::New(isolate, _javascript_rightclick));
     rabbit->Set(String::NewFromUtf8(isolate, "findcolor"), FunctionTemplate::New(isolate, _javascript_findcolor));

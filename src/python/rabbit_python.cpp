@@ -55,6 +55,15 @@ PyObject * _python_click(PyObject * self, PyObject * args) {
     return Py_BuildValue("");
 }
 
+PyObject * _python_scroll(PyObject * self, PyObject * args) {
+    Rabbit * rabbit = new Rabbit();
+    double arg_0;
+    PyArg_ParseTuple(args, "d", &arg_0);
+    rabbit->scroll(arg_0);
+    delete rabbit;
+    return Py_BuildValue("");
+}
+
 PyObject * _python_doubleclick(PyObject * self, PyObject * args) {
     Rabbit * rabbit = new Rabbit();
     PyArg_ParseTuple(args, "");
@@ -174,6 +183,7 @@ PyMethodDef _rabbit_python_methods[] = {
     { "input", _python_input, METH_VARARGS, NULL },
     { "moveto", _python_moveto, METH_VARARGS, NULL },
     { "click", _python_click, METH_VARARGS, NULL },
+    { "scroll", _python_scroll, METH_VARARGS, NULL },
     { "doubleclick", _python_doubleclick, METH_VARARGS, NULL },
     { "rightclick", _python_rightclick, METH_VARARGS, NULL },
     { "findcolor", _python_findcolor, METH_VARARGS, NULL },

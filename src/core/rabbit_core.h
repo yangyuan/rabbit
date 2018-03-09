@@ -20,6 +20,7 @@ public:
 	void click();
 	void doubleclick();
 	void rightclick();
+	void scroll(double tolerance);
 	void findcolor(int * ret_x, int * ret_y, unsigned int color, unsigned int x, unsigned int y, unsigned int w, unsigned int h, double tolerance);
 	void findwindow(long long * window, const char * window_name, const char * class_name);
 

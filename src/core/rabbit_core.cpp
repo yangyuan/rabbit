@@ -108,6 +108,16 @@ void Rabbit::rightclick() {
 	SendInput(2, input, sizeof(INPUT));
 }
 
+void Rabbit::scroll(double tolerance) {
+	INPUT input;
+	ZeroMemory(&input, sizeof(INPUT));
+
+	input.type = INPUT_MOUSE;
+	input.mi.dwFlags = MOUSEEVENTF_WHEEL;
+	input.mi.mouseData = WHEEL_DELTA * tolerance;
+	SendInput(1, &input, sizeof(INPUT));
+}
+
 void Rabbit::findcolor(int * ret_x, int * ret_y,
 	unsigned int color,
 	unsigned int x, unsigned int y, unsigned int w, unsigned int h,
