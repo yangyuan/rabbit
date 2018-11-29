@@ -28,3 +28,6 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    
+- script: python tools/build.py
+  displayName: 'Generate Packages Code'
